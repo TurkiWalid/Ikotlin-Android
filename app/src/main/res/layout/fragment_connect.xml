@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="horizontal"
+    android:background="@color/main_background"
+    tools:context="com.androidprojects.esprit.ikotlin.fragments.ConnectFragment">
+
+    <com.androidprojects.esprit.ikotlin.utils.CustomVerticalViewPager
+        android:id="@+id/viewpager_connectTabs"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_weight="1"/>
+
+
+    <q.rorbin.verticaltablayout.VerticalTabLayout
+        android:id="@+id/vertical_nvgTab_connect"
+        android:layout_width="50dp"
+        android:layout_height="match_parent"
+        android:layout_marginTop="3dp"
+        android:layout_marginBottom="3dp"
+        android:layout_marginRight="1dp"
+        android:background="@drawable/connect_tabs_background"
+        app:indicator_color="@color/float_transparent"
+        app:tabMode="fixed"/>-->
+</LinearLayout>

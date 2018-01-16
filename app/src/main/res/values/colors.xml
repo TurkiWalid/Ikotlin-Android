@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- app base colors -->
+    <color name="primaryDark">#16374b</color>
+    <color name="base_color_1">#3b5670</color>
+    <color name="base_color_2">#e99631</color>
+
+    <!-- backgrounds -->
+    <color name="main_background">#f2f2f2</color>
+    <color name="comment_background">#f4f2f2</color>
+
+    <!-- others -->
+    <color name="refresh_progress_1">#551a8b</color>
+    <color name="refresh_progress_2">#ba0d0d</color>
+    <color name="refresh_progress_3">#dd6300</color>
+    <color name="floating_action_color">#43307a</color>
+    <color name="float_transparent">#00FFFFFF</color>
+    <color name="black">#181818</color>
+
+</resources>

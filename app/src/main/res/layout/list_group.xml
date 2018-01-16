@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="horizontal"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingBottom="16dp"
+    android:paddingLeft="10dp"
+    android:paddingTop="16dp">
+
+    <ImageView
+        android:id="@+id/courseIcon"
+        android:layout_width="55px"
+        android:layout_height="55px"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:src="@drawable/ic_overview"/>
+    <TextView
+        android:id="@+id/listTitle_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@+id/courseIcon"
+        android:layout_marginLeft="20px"
+        android:textColor="#000000"
+        android:textSize="16dip"/>
+    <ProgressBar
+        android:id="@+id/courseProgress"
+        android:layout_width="180dp"
+        android:layout_height="7dp"
+        style="?android:attr/progressBarStyleHorizontal"
+        android:progressTint="#7DA7C8"
+        android:layout_toEndOf="@id/courseIcon"
+        android:layout_below="@id/listTitle_text"
+        android:layout_marginLeft="5dp"
+        android:progress="20"
+        android:max="100"/>
+   <!-- <View
+         android:id="@+id/courseOptionsBtn"
+         android:layout_width="30px"
+         android:layout_height="35px"
+         android:layout_alignParentRight="true"
+         android:layout_centerVertical="true"/> -->
+
+
+
+</RelativeLayout>

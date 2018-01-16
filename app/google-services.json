@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "121612033003",
+    "firebase_url": "https://ikotlin-ce82a.firebaseio.com",
+    "project_id": "ikotlin-ce82a",
+    "storage_bucket": "ikotlin-ce82a.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:121612033003:android:89d50d334207d165",
+        "android_client_info": {
+          "package_name": "com.androidprojects.esprit.ikotlin"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "121612033003-3tf90jsbainp1i5h2gh27et31ig9no78.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCxQyeqV5QMRx9LxwfkAhbrtyjV6MqSn4Y"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

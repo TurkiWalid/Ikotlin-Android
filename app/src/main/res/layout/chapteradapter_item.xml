@@ -1,0 +1,27 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+    <TextView
+        android:id="@+id/oneChapter_title"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:background="#efefef"
+        android:gravity="center"
+        android:fontFamily="@fonts/graublau_slab_bold"
+        android:textSize="10pt"
+        android:text="Returns and jumps"/>
+    <ScrollView
+        android:id="@+id/chapterContentScrollView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fillViewport="true">
+        <WebView
+            android:id="@+id/chapterContentWebView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:paddingLeft="5dp"
+            android:paddingRight="5dp"/>
+    </ScrollView>
+</LinearLayout>
