@@ -32,14 +32,13 @@
             android:layout_centerInParent="true"
             app:civ_border_width="2dp"
             app:civ_border_color="@color/base_color_2"/>
-
         <TextView
             android:id="@+id/fullNameInProfile"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
             android:layout_marginTop="10dp"
-            android:layout_below="@+id/userImgProfile"
+            android:layout_below="@id/userImgProfile"
             android:textSize="20dp"
             fontPath="fonts/graublau_slab.ttf"
             android:textColor="@color/base_color_2"

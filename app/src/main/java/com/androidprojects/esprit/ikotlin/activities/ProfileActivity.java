@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -14,6 +15,7 @@ import android.widget.TextView;
 import com.androidprojects.esprit.ikotlin.R;
 import com.androidprojects.esprit.ikotlin.adapters.ProfileTabsAdapter;
 import com.androidprojects.esprit.ikotlin.models.User;
+import com.androidprojects.esprit.ikotlin.utils.DataBaseHandler;
 import com.androidprojects.esprit.ikotlin.webservices.UserProfileServices;
 import com.squareup.picasso.Picasso;
 
@@ -34,9 +36,9 @@ public class ProfileActivity extends AppCompatActivity {
         /*** disabling actionBar ****/
         getSupportActionBar().hide();
 
-        user=LoginActivity.loggedUser;
+        //user=LoginActivity.loggedUser; /** why not using sqlite ?*/
         //user=FirebaseAuth.getInstance().getCurrentUser();
-        //user= DataBaseHandler.getInstance(getApplicationContext()).getUser();
+        user= DataBaseHandler.getInstance(getApplicationContext()).getUser();
 
         /** the tabLayout **/
         tabLayout = findViewById(R.id.profileTabs);
@@ -57,10 +59,11 @@ public class ProfileActivity extends AppCompatActivity {
         if(user!=null){
             /** fields data **/
             ((TextView) findViewById(R.id.fullNameInProfile)).setText((user.getUsername().isEmpty()?user.getFirstName():user.getUsername()));
-            //Log.i("user",user.toString());
-
+            Log.d("profileI","im here");
+            Log.d("profileI",user.toString());
             if(user.getPictureURL()!=null){
                 Picasso.with(getApplicationContext()).load(Uri.parse(user.getPictureURL())).into((ImageView)findViewById(R.id.userImgProfile));
+
             }
             else
                 ((ImageView)findViewById(R.id.userImgProfile)).setImageDrawable(UserProfileServices.getInstance().getEmptyProfimePicture(user.getUsername()));

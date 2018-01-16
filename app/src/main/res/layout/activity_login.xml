@@ -115,7 +115,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Log in with Facebook"
-        android:layout_marginBottom="40dp"
+        android:layout_gravity="start"
         />
 
     <com.rey.material.widget.Button
