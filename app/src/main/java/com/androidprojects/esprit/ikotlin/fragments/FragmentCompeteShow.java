@@ -22,6 +22,7 @@ import com.androidprojects.esprit.ikotlin.models.Competition;
 import com.androidprojects.esprit.ikotlin.models.CompetitionAnswer;
 import com.androidprojects.esprit.ikotlin.webservices.CompetitionServices;
 import com.androidprojects.esprit.ikotlin.webservices.ServerCallbacks;
+import com.androidprojects.esprit.ikotlin.webservices.StringCallbacks;
 import com.androidprojects.esprit.ikotlin.webservices.UserProfileServices;
 import com.google.firebase.auth.FirebaseAuth;
 import com.squareup.picasso.Picasso;
@@ -56,6 +57,7 @@ public class FragmentCompeteShow extends Fragment {
     LinearLayout answerdlayout;
     ImageButton editAnswer;
     ProgressDialog progressDialog;
+    TextView argsText;
 
     private int answerid;
     private boolean editnow = false;
@@ -88,6 +90,7 @@ public class FragmentCompeteShow extends Fragment {
         addedcontent = getActivity().findViewById(R.id.compete_add_content);
         answerdlayout = getActivity().findViewById(R.id.compete_layout_answerd);
         editAnswer = getActivity().findViewById(R.id.compete_edit_answer);
+        argsText=getActivity().findViewById(R.id.compete_args);
         run = getActivity().findViewById(R.id.compete_run);
         loadCompetition();
         loadAnswer();
@@ -204,6 +207,7 @@ public class FragmentCompeteShow extends Fragment {
     public void fillanswer() {
         answer.setCreated(Calendar.getInstance());
         textDateAnswer.setText(answer.getCreated_string());
+        addedcontent.setText(answer.getContent());
         //Toast.makeText(getContext(),answer.getContent(),Toast.LENGTH_LONG).show();
         if (answer.getContent() != null) {
             answerCodeView.setOptions(Options.Default.get(getContext())
@@ -304,8 +308,12 @@ public class FragmentCompeteShow extends Fragment {
         run.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                progressDialog.setMessage("Running code, please wait.");
+                progressDialog.show();
+                String s=addedcontent.getText().toString().replaceAll("[\r\n]", "\n");
+               // s=s.replaceAll("\\s+","+");
                 Map<String, String> m = new HashMap<String, String>();
-                m.put("text", addedcontent.getText().toString().replaceAll("[\r\n]", "\n").replaceAll(" ", ""));
+                m.put("text", s);
                 m.put("name", "ikotlinrun.kt");
                 JSONObject jsonBody = new JSONObject(m);
                 m.clear();
@@ -314,25 +322,31 @@ public class FragmentCompeteShow extends Fragment {
                 JSONObject FullBody = new JSONObject();
                 try {
                     FullBody.put("files", jsonArray);
-                    CompetitionServices.getInstance().tryCode(getContext(), FullBody, new ServerCallbacks() {
+                    FullBody.put("args", argsText.getText().toString());
+                    CompetitionServices.getInstance().tryCode(getContext(), FullBody, new StringCallbacks() {
                         @Override
-                        public void onSuccess(JSONObject result) {
-                            Toast.makeText(getContext(), result.toString(), Toast.LENGTH_LONG);
+                        public void onSuccess(String result) {
+                            Toast.makeText(getContext(), result, Toast.LENGTH_LONG).show();
+                           // Log.d("kotlinResponse",result);
+                            if (progressDialog.isShowing()) {
+                                progressDialog.dismiss();
+                            }
                         }
 
                         @Override
                         public void onError(VolleyError result) {
                             Toast.makeText(getContext(), "Error", Toast.LENGTH_LONG);
-                        }
-
-                        @Override
-                        public void onWrong(JSONObject result) {
-                            Toast.makeText(getContext(), "Wrong", Toast.LENGTH_LONG);
+                            if (progressDialog.isShowing()) {
+                                progressDialog.dismiss();
+                            }
                         }
                     });
                 } catch (JSONException e) {
                     e.printStackTrace();
                     Toast.makeText(getContext(), "Error while running on server\n Please report", Toast.LENGTH_SHORT).show();
+                    if (progressDialog.isShowing()) {
+                        progressDialog.dismiss();
+                    }
                 }
 
             }

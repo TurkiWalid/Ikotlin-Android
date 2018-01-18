@@ -17,5 +17,6 @@
     <color name="floating_action_color">#43307a</color>
     <color name="float_transparent">#00FFFFFF</color>
     <color name="black">#181818</color>
+    <color name="paper_background">#F8ECC2</color>
 
 </resources>

@@ -87,6 +87,9 @@ dependencies {
     compile "com.google.firebase:firebase-auth:9.6.1"
     // Required only if Facebook login support is required
     compile('com.facebook.android:facebook-android-sdk:4.27.0')
+    //tutorial about the app (tour)
+    implementation 'uk.co.samuelwall:material-tap-target-prompt:2.6.0'
+
 }
 apply plugin: 'com.google.gms.google-services'
 

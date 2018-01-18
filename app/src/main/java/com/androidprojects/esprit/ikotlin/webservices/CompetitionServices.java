@@ -2,12 +2,15 @@ package com.androidprojects.esprit.ikotlin.webservices;
 
 import android.content.Context;
 import android.util.Log;
+import android.widget.Toast;
 
+import com.android.volley.AuthFailureError;
 import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.StringRequest;
 import com.androidprojects.esprit.ikotlin.models.Competition;
 import com.androidprojects.esprit.ikotlin.models.CompetitionAnswer;
 import com.androidprojects.esprit.ikotlin.utils.AppSingleton;
@@ -378,12 +381,12 @@ public class CompetitionServices {
         AppSingleton.getInstance(context).addToRequestQueue(jsObjRequest, "AddCompetition");
     }
 
-    public void tryCode(Context context,JSONObject jsb,final ServerCallbacks serverCallbacks) throws JSONException {
+    public void tryCode(final Context context, final JSONObject jsb, final StringCallbacks stringCallbacks) throws JSONException {
         final JSONObject jsonBody = new JSONObject();
         jsonBody.put("project",jsb);
-        jsonBody.put("filename","ikotlin+run.kt");
+        jsonBody.put("filename","ikotlinrun.kt");
 
-        JsonObjectRequest jsObjRequest = new JsonObjectRequest
+      /*  JsonObjectRequest jsObjRequest = new JsonObjectRequest
                 (Request.Method.POST, URL_TRY_KOTLIN, jsonBody, new Response.Listener<JSONObject>() {
 
                     @Override
@@ -407,26 +410,50 @@ public class CompetitionServices {
                         serverCallbacks.onError(error);
                     }
                 }){
-
             @Override
             public String getBodyContentType() {
-                return "application/x-www-form-urlencoded";
+                return "application/x-www-form-urlencoded; charset=UTF-8";
             }
+        };*/
+
+        StringRequest jsonObjRequest = new StringRequest(Request.Method.POST,
+                URL_TRY_KOTLIN,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        stringCallbacks.onSuccess(response);
+                    }
+                }, new Response.ErrorListener() {
 
             @Override
-            protected String getParamsEncoding() {
-                return "utf-8";
+            public void onErrorResponse(VolleyError error) {
+                stringCallbacks.onError(error);
             }
-        };
-        Log.e("Mvolley",jsonBody.toString());
-        Log.e("Mvolley",jsObjRequest.toString());
+        }) {
+            @Override
+            public String getPostBodyContentType() {
+                return "application/x-www-form-urlencoded; charset=UTF-8";
+            }
 
-        jsObjRequest.setRetryPolicy(new DefaultRetryPolicy(
+
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                Map<String, String> params = new HashMap<String, String>();
+                params.put("project",jsb.toString().trim());
+                params.put("filename","ikotlinrun.kt");
+                return params;
+            }
+
+        };
+       // Log.e("kotlinResponse",jsonBody.toString());
+       // Log.e("kotlinResponse",jsonObjRequest.toString());
+
+        jsonObjRequest.setRetryPolicy(new DefaultRetryPolicy(
                 8000,//timeout
                 5,//retry
                 DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
 
-        AppSingleton.getInstance(context).addToRequestQueue(jsObjRequest, "runCode");
+        AppSingleton.getInstance(context).addToRequestQueue(jsonObjRequest, "runCode");
 
 
     }
