@@ -10,6 +10,11 @@
         android:layout_height="match_parent">
         <LinearLayout
             android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            >
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical"
             android:weightSum="100"
@@ -37,8 +42,7 @@
                     android:text="Problemset"
                     android:textSize="18dp"
                     android:textColor="@color/base_color_1"
-                    android:gravity="center"
-                    android:fontFamily="@fonts/graublau_slab"/>
+                    android:gravity="center"/>
             </LinearLayout>
 
 
@@ -83,7 +87,6 @@
                                 android:text="subject..."
                                 android:textSize="15dp"
                                 android:layout_weight="75"
-                                android:fontFamily="@fonts/graublau_slab"
                                 />
                             <ImageView
                                 android:layout_width="20dp"
@@ -97,7 +100,6 @@
                                 android:textSize="13dp"
                                 android:text="0"
                                 android:layout_gravity="center"
-                                fontFamily="fonts/graublau_slab.ttf"
                                 tools:ignore="MissingPrefix"
                                 />
 
@@ -108,7 +110,6 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:text="content"
-                            android:fontFamily="@fonts/graublau_slab"
                             android:layout_marginBottom="5dp"
                             />
 
@@ -131,7 +132,6 @@
                                     android:text="name"
                                     android:textSize="12dp"
                                     android:layout_gravity="end"
-                                    fontFamily="fonts/graublau_slab.ttf"
                                     tools:ignore="MissingPrefix"
                                     />
                                 <TextView
@@ -141,7 +141,6 @@
                                     android:text="created"
                                     android:textSize="11dp"
                                     android:layout_gravity="end"
-                                    fontFamily="fonts/graublau_slab.ttf"
                                     tools:ignore="MissingPrefix"
                                     />
                             </LinearLayout>
@@ -183,7 +182,6 @@
                         android:layout_height="wrap_content"
                         android:text="Answered "
                         android:layout_margin="10dp"
-                        android:fontFamily="fonts/graublau_slab.ttf"
                         />
                     <com.rey.material.widget.ImageView
                         android:layout_width="20dp"
@@ -197,7 +195,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_margin="10dp"
-                        android:fontFamily="fonts/graublau_slab.ttf"
+                        
                         android:text="date"
                         />
                     <ImageButton
@@ -248,15 +246,14 @@
                     android:layout_height="wrap_content"
                     android:text="Arguments "
                     android:layout_margin="4dp"
-                    android:fontFamily="fonts/graublau_slab.ttf"
                     android:textSize="13dp"
                     />
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="(Arguments must be separated by spaces)"
+                    android:text="(Arguments must be separated with spaces)"
                     android:layout_margin="3dp"
-                    android:fontFamily="fonts/graublau_slab.ttf"
+                    
                     android:textColor="@color/liv_gray_active_icon"
                     android:textSize="11dp"
                     />
@@ -267,9 +264,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint=" Args..."
-                android:layout_margin="2dp"
-                android:textSize="15dp"
-                android:padding="3dp"
+                android:layout_margin="4dp"
+                android:textSize="14sp"
+                android:padding="10dp"
                 android:background="@color/paper_background"
                 />
 
@@ -282,14 +279,30 @@
                 >
                 <Button
                     android:id="@+id/compete_run"
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:text="Run on server"
-                    android:layout_weight="5"
+                    android:layout_weight="4"
                     />
             </LinearLayout>
 
         </LinearLayout>
+
+            <TextView
+                android:id="@+id/compete_response"
+                android:gravity="left"
+                android:layout_height="wrap_content"
+                android:layout_width="match_parent"
+                android:padding="10dp"
+                android:layout_margin="6dp"
+                android:editable="false"
+                android:textSize="14sp"
+                android:background="@color/paper_background"
+                android:visibility="gone"
+                />
+        </LinearLayout>
+
+
     </ScrollView>
 
 </FrameLayout>

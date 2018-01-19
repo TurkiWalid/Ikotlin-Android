@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.CardView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -59,6 +60,8 @@ public class FragmentCompeteShow extends Fragment {
     ProgressDialog progressDialog;
     TextView argsText;
 
+    TextView outputText;
+
     private int answerid;
     private boolean editnow = false;
 
@@ -92,6 +95,7 @@ public class FragmentCompeteShow extends Fragment {
         editAnswer = getActivity().findViewById(R.id.compete_edit_answer);
         argsText=getActivity().findViewById(R.id.compete_args);
         run = getActivity().findViewById(R.id.compete_run);
+        outputText=getActivity().findViewById(R.id.compete_response);
         loadCompetition();
         loadAnswer();
         attachAddListener();
@@ -308,16 +312,17 @@ public class FragmentCompeteShow extends Fragment {
         run.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                run.setEnabled(false);
                 progressDialog.setMessage("Running code, please wait.");
                 progressDialog.show();
-                String s=addedcontent.getText().toString().replaceAll("[\r\n]", "\n");
+                final String s=addedcontent.getText().toString().replaceAll("[\r\n]", "\n");
                // s=s.replaceAll("\\s+","+");
                 Map<String, String> m = new HashMap<String, String>();
                 m.put("text", s);
                 m.put("name", "ikotlinrun.kt");
-                JSONObject jsonBody = new JSONObject(m);
+                final JSONObject jsonBody = new JSONObject(m);
                 m.clear();
-                JSONArray jsonArray = new JSONArray();
+                final JSONArray jsonArray = new JSONArray();
                 jsonArray.put(jsonBody);
                 JSONObject FullBody = new JSONObject();
                 try {
@@ -326,8 +331,95 @@ public class FragmentCompeteShow extends Fragment {
                     CompetitionServices.getInstance().tryCode(getContext(), FullBody, new StringCallbacks() {
                         @Override
                         public void onSuccess(String result) {
-                            Toast.makeText(getContext(), result, Toast.LENGTH_LONG).show();
-                           // Log.d("kotlinResponse",result);
+                            run.setEnabled(true);
+                            outputText.setVisibility(View.VISIBLE);
+                            //Toast.makeText(getContext(), result, Toast.LENGTH_LONG).show();
+                            JSONObject jsOResponse,subs;
+                            JSONArray subsar;
+                            String err="";
+                            try {
+                               jsOResponse =new JSONObject(result);
+                                //Log.d("tryko",jsOResponse.toString());
+                               if(jsOResponse.has("text")){
+                                   outputText.setText(jsOResponse.get("text").toString().replaceAll("<[^>]+>", ""));
+                                   outputText.setBackgroundColor(getActivity().getResources().getColor(R.color.success_background));
+                               }
+                                else {
+                                   //Log.d("tryko",jsOResponse.toString());
+                                   if(jsOResponse.has("errors")) {
+                                       subs= (JSONObject) jsOResponse.get("errors");
+                                       if (subs.has("ikotlinrun.kt")) {
+                                            String line="",chr="",severity="",msg="";
+                                            JSONObject ln;
+                                           subsar= subs.getJSONArray("ikotlinrun.kt");
+                                           subs=subsar.getJSONObject(0);
+                                           if(subs.has("interval")) {
+                                               JSONObject subsinterval= (JSONObject) subs.get("interval");
+                                               if(subsinterval.has("start")) {
+                                                   ln= (JSONObject) subsinterval.get("start");
+                                                   line=ln.getString("line");
+                                                   chr=ln.getString("ch");
+                                               }
+                                           }
+
+                                           if(subs.has("message")) {
+                                               msg=subs.getString("message");
+                                           }
+
+                                           if(subs.has("severity")){
+                                               severity=subs.getString("severity");
+                                           }
+
+                                           //read intervals
+                                           if(severity.length()>0) err = severity+" : \n";
+                                           err = "Error : \n";
+
+                                           if(msg.length()>0) err+="\n\tMessage  : "+msg;
+                                           if(line.length()>0) err+="\n\tIn line : "+line;
+                                           if(chr.length()>0) err+="\n\tCharacter: "+chr;
+
+                                           outputText.setText(err);
+                                       } else
+                                           outputText.setText("Compilation error !");
+                                       outputText.setBackgroundColor(getActivity().getResources().getColor(R.color.error_background));
+                                   }
+                               }
+                            //Log.d("tryko",jsOResponse.toString());
+                               if(jsOResponse.has("exception")){
+                                   if(!jsOResponse.getString("exception").equals("null")) {
+                                       String name="",method="",line="",cause="";
+                                       subs= (JSONObject) jsOResponse.get("exception");
+                                       if(subs.has("fullName")) name=subs.getString("fullName");
+                                       if(subs.has("cause")) name=subs.getString("cause");
+                                       if(subs.has("stackTrace")){
+                                           subsar=subs.getJSONArray("stackTrace");
+                                           subs=subsar.getJSONObject(0);
+                                           if(subs.has("methodName")) method=subs.getString("methodName");
+                                           if(subs.has("lineNumber")) line=subs.getString("lineNumber");
+                                       }
+
+
+                                       if(err.length()>0) err+="\n";
+
+                                       err+="Exception : \n";
+                                       if(name.length()>0) err+="\n\tReason(s) : "+name;
+                                       if(method.length()>0)err+="\n\tMethod : "+method;
+                                       if(line.length()>0)err+="\n\tIn line  : "+line;
+                                       if(cause.length()>0)err+="\n\tCause   : "+cause;
+
+                                       outputText.setText(err);
+                                       outputText.setBackgroundColor(getActivity().getResources().getColor(R.color.error_background));
+                                   }
+                               }
+
+                                Log.d("kotlinResponse",jsOResponse.toString());
+                            } catch (JSONException e) {
+                                outputText.setText("Parsing error !");
+                                outputText.setBackgroundColor(getActivity().getResources().getColor(R.color.paper_background));
+                            }
+
+
+
                             if (progressDialog.isShowing()) {
                                 progressDialog.dismiss();
                             }
@@ -335,13 +427,16 @@ public class FragmentCompeteShow extends Fragment {
 
                         @Override
                         public void onError(VolleyError result) {
-                            Toast.makeText(getContext(), "Error", Toast.LENGTH_LONG);
+                            run.setEnabled(true);
+                            outputText.setText("Please retry...");
+                            outputText.setBackgroundColor(getActivity().getResources().getColor(R.color.paper_background));
                             if (progressDialog.isShowing()) {
                                 progressDialog.dismiss();
                             }
                         }
                     });
                 } catch (JSONException e) {
+                    run.setEnabled(true);
                     e.printStackTrace();
                     Toast.makeText(getContext(), "Error while running on server\n Please report", Toast.LENGTH_SHORT).show();
                     if (progressDialog.isShowing()) {

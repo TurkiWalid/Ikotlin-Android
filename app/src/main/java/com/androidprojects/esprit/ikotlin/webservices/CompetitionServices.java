@@ -449,8 +449,8 @@ public class CompetitionServices {
        // Log.e("kotlinResponse",jsonObjRequest.toString());
 
         jsonObjRequest.setRetryPolicy(new DefaultRetryPolicy(
-                8000,//timeout
-                5,//retry
+                10000,//timeout
+                20,//retry
                 DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
 
         AppSingleton.getInstance(context).addToRequestQueue(jsonObjRequest, "runCode");

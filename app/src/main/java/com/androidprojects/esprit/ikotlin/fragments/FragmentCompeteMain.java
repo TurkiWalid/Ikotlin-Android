@@ -9,6 +9,7 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -41,7 +42,6 @@ public class FragmentCompeteMain extends Fragment {
 
     MultiStateToggleButton toggle_view;
     Spinner orderSpinner;
-    ImageButton top_places;
     Button bL1,bL2,bL3,bL4,bL5,bL6;
     RecyclerView competitionsRecyclerView,answersRecyclerView;
     SwipeRefreshLayout competeSwipeRefresh,competeAnswerSwipeRefresh;
@@ -76,7 +76,6 @@ public class FragmentCompeteMain extends Fragment {
 
         toggle_view = getActivity().findViewById(R.id.compete_toggle);
         orderSpinner=getActivity().findViewById(R.id.compete_orderby);
-        top_places=getActivity().findViewById(R.id.compete_top_places);
         bL1=getActivity().findViewById(R.id.compete_level_1);
         bL2=getActivity().findViewById(R.id.compete_level_2);
         bL3=getActivity().findViewById(R.id.compete_level_3);
@@ -120,6 +119,7 @@ public class FragmentCompeteMain extends Fragment {
     }
 
     public void LoadList(){
+        Log.d("toggled",toggle+"");
         if (Configuration.isOnline(getContext())){
             competeAnswerSwipeRefresh.setRefreshing(true);
             competeSwipeRefresh.setRefreshing(true);
@@ -361,11 +361,11 @@ public class FragmentCompeteMain extends Fragment {
 
                 level=1;
 
-                bL2.setBackgroundColor(getContext().getResources().getColor(R.color.base_color_1));
-                bL3.setBackgroundColor(getContext().getResources().getColor(R.color.base_color_1));
-                bL4.setBackgroundColor(getContext().getResources().getColor(R.color.base_color_1));
-                bL5.setBackgroundColor(getContext().getResources().getColor(R.color.base_color_1));
-                bL6.setBackgroundColor(getContext().getResources().getColor(R.color.base_color_1));
+                bL2.setBackgroundColor(getContext().getResources().getColor(R.color.material_blue_grey_80));
+                bL3.setBackgroundColor(getContext().getResources().getColor(R.color.material_blue_grey_80));
+                bL4.setBackgroundColor(getContext().getResources().getColor(R.color.material_blue_grey_80));
+                bL5.setBackgroundColor(getContext().getResources().getColor(R.color.material_blue_grey_80));
+                bL6.setBackgroundColor(getContext().getResources().getColor(R.color.material_blue_grey_80));
 
                 bL1.setBackgroundColor(getContext().getResources().getColor(R.color.base_color_2));
                 loaded_length_competition=0;
@@ -380,11 +380,11 @@ public class FragmentCompeteMain extends Fragment {
 
                 level=2;
 
-                bL1.setBackgroundColor(getContext().getResources().getColor(R.color.base_color_1));
-                bL3.setBackgroundColor(getContext().getResources().getColor(R.color.base_color_1));
-                bL4.setBackgroundColor(getContext().getResources().getColor(R.color.base_color_1));
-                bL5.setBackgroundColor(getContext().getResources().getColor(R.color.base_color_1));
-                bL6.setBackgroundColor(getContext().getResources().getColor(R.color.base_color_1));
+                bL1.setBackgroundColor(getContext().getResources().getColor(R.color.material_blue_grey_80));
+                bL3.setBackgroundColor(getContext().getResources().getColor(R.color.material_blue_grey_80));
+                bL4.setBackgroundColor(getContext().getResources().getColor(R.color.material_blue_grey_80));
+                bL5.setBackgroundColor(getContext().getResources().getColor(R.color.material_blue_grey_80));
+                bL6.setBackgroundColor(getContext().getResources().getColor(R.color.material_blue_grey_80));
 
                 bL2.setBackgroundColor(getContext().getResources().getColor(R.color.base_color_2));
                 loaded_length_competition=0;
@@ -399,11 +399,11 @@ public class FragmentCompeteMain extends Fragment {
 
                 level=3;
 
-                bL2.setBackgroundColor(getContext().getResources().getColor(R.color.base_color_1));
-                bL1.setBackgroundColor(getContext().getResources().getColor(R.color.base_color_1));
-                bL4.setBackgroundColor(getContext().getResources().getColor(R.color.base_color_1));
-                bL5.setBackgroundColor(getContext().getResources().getColor(R.color.base_color_1));
-                bL6.setBackgroundColor(getContext().getResources().getColor(R.color.base_color_1));
+                bL2.setBackgroundColor(getContext().getResources().getColor(R.color.material_blue_grey_80));
+                bL1.setBackgroundColor(getContext().getResources().getColor(R.color.material_blue_grey_80));
+                bL4.setBackgroundColor(getContext().getResources().getColor(R.color.material_blue_grey_80));
+                bL5.setBackgroundColor(getContext().getResources().getColor(R.color.material_blue_grey_80));
+                bL6.setBackgroundColor(getContext().getResources().getColor(R.color.material_blue_grey_80));
 
                 bL3.setBackgroundColor(getContext().getResources().getColor(R.color.base_color_2));
                 loaded_length_competition=0;
@@ -418,11 +418,11 @@ public class FragmentCompeteMain extends Fragment {
 
                 level=4;
 
-                bL2.setBackgroundColor(getContext().getResources().getColor(R.color.base_color_1));
-                bL3.setBackgroundColor(getContext().getResources().getColor(R.color.base_color_1));
-                bL1.setBackgroundColor(getContext().getResources().getColor(R.color.base_color_1));
-                bL5.setBackgroundColor(getContext().getResources().getColor(R.color.base_color_1));
-                bL6.setBackgroundColor(getContext().getResources().getColor(R.color.base_color_1));
+                bL2.setBackgroundColor(getContext().getResources().getColor(R.color.material_blue_grey_80));
+                bL3.setBackgroundColor(getContext().getResources().getColor(R.color.material_blue_grey_80));
+                bL1.setBackgroundColor(getContext().getResources().getColor(R.color.material_blue_grey_80));
+                bL5.setBackgroundColor(getContext().getResources().getColor(R.color.material_blue_grey_80));
+                bL6.setBackgroundColor(getContext().getResources().getColor(R.color.material_blue_grey_80));
 
                 bL4.setBackgroundColor(getContext().getResources().getColor(R.color.base_color_2));
                 loaded_length_competition=0;
@@ -437,11 +437,11 @@ public class FragmentCompeteMain extends Fragment {
 
                 level=5;
 
-                bL2.setBackgroundColor(getContext().getResources().getColor(R.color.base_color_1));
-                bL3.setBackgroundColor(getContext().getResources().getColor(R.color.base_color_1));
-                bL4.setBackgroundColor(getContext().getResources().getColor(R.color.base_color_1));
-                bL1.setBackgroundColor(getContext().getResources().getColor(R.color.base_color_1));
-                bL6.setBackgroundColor(getContext().getResources().getColor(R.color.base_color_1));
+                bL2.setBackgroundColor(getContext().getResources().getColor(R.color.material_blue_grey_80));
+                bL3.setBackgroundColor(getContext().getResources().getColor(R.color.material_blue_grey_80));
+                bL4.setBackgroundColor(getContext().getResources().getColor(R.color.material_blue_grey_80));
+                bL1.setBackgroundColor(getContext().getResources().getColor(R.color.material_blue_grey_80));
+                bL6.setBackgroundColor(getContext().getResources().getColor(R.color.material_blue_grey_80));
 
                 bL5.setBackgroundColor(getContext().getResources().getColor(R.color.base_color_2));
                 loaded_length_competition=0;
@@ -456,11 +456,11 @@ public class FragmentCompeteMain extends Fragment {
 
                 level=6;
 
-                bL2.setBackgroundColor(getContext().getResources().getColor(R.color.base_color_1));
-                bL3.setBackgroundColor(getContext().getResources().getColor(R.color.base_color_1));
-                bL4.setBackgroundColor(getContext().getResources().getColor(R.color.base_color_1));
-                bL5.setBackgroundColor(getContext().getResources().getColor(R.color.base_color_1));
-                bL1.setBackgroundColor(getContext().getResources().getColor(R.color.base_color_1));
+                bL2.setBackgroundColor(getContext().getResources().getColor(R.color.material_blue_grey_80));
+                bL3.setBackgroundColor(getContext().getResources().getColor(R.color.material_blue_grey_80));
+                bL4.setBackgroundColor(getContext().getResources().getColor(R.color.material_blue_grey_80));
+                bL5.setBackgroundColor(getContext().getResources().getColor(R.color.material_blue_grey_80));
+                bL1.setBackgroundColor(getContext().getResources().getColor(R.color.material_blue_grey_80));
 
                 bL6.setBackgroundColor(getContext().getResources().getColor(R.color.base_color_2));
                 loaded_length_competition=0;
@@ -535,4 +535,9 @@ public class FragmentCompeteMain extends Fragment {
         });
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        LoadList();
+    }
 }

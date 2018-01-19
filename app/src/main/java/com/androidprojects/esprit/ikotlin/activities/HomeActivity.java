@@ -27,7 +27,6 @@ import java.util.List;
 
 import uk.co.chrisjenx.calligraphy.CalligraphyConfig;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
-import uk.co.samuelwall.materialtaptargetprompt.MaterialTapTargetPrompt;
 
 public class HomeActivity extends AppCompatActivity {
 
@@ -114,7 +113,7 @@ public class HomeActivity extends AppCompatActivity {
         });
         // setting default font
         CalligraphyConfig.initDefault(new CalligraphyConfig.Builder()
-                .setDefaultFontPath("font/open_sans_light.ttf")
+                .setDefaultFontPath("fonts/open_sans_light.ttf")
                 .build()
         );
 
