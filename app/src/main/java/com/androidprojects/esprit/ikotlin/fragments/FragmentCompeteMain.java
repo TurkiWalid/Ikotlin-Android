@@ -99,7 +99,7 @@ public class FragmentCompeteMain extends Fragment {
             }
         };
         competitionsRecyclerView.setItemAnimator(animator);
-        answersRecyclerView.setItemAnimator(animator);
+        //answersRecyclerView.setItemAnimator(animator);
 
         layoutCompetition = new LinearLayoutManager(getContext());
         layoutAnswer = new LinearLayoutManager(getContext());
@@ -119,7 +119,6 @@ public class FragmentCompeteMain extends Fragment {
     }
 
     public void LoadList(){
-        Log.d("toggled",toggle+"");
         if (Configuration.isOnline(getContext())){
             competeAnswerSwipeRefresh.setRefreshing(true);
             competeSwipeRefresh.setRefreshing(true);
@@ -170,7 +169,7 @@ public class FragmentCompeteMain extends Fragment {
                                         competitionAdapter.notifyDataSetChanged();
                                 }
                                 //addCalculated
-                                if(loaded_length_competition==0) loaded_length_competition+=15;
+                                if(loaded_length_competition==0) loaded_length_competition+=result.length();
                                 else
                                     loaded_length_competition+=10;
                             }
@@ -211,7 +210,10 @@ public class FragmentCompeteMain extends Fragment {
                                 Toast.makeText(getContext(),"Server error while loading competitions , please report",Toast.LENGTH_SHORT).show();
                                 goShow=false;
                             }
+                           // Log.d("loaded",result+"");Log.d("loaded",""+loaded_length_answers);
+                            //Log.d("loaded",array.toString());
                             if(array.length()==0) goShow=false;
+                            //Log.d("loaded",goShow+"");
                             for(int i = 0 ; i < array.length() ; i++){
                                 try {
                                     /** parse forum and add it to the arraylist**/
@@ -222,6 +224,7 @@ public class FragmentCompeteMain extends Fragment {
                                     goShow=false;
                                 }
                             }
+                            //Log.d("loaded",goShow+"");
                             /** All the work will be here **/
                             if(goShow) {
                                 competeAnswerSwipeRefresh.setVisibility(View.VISIBLE);
@@ -241,7 +244,7 @@ public class FragmentCompeteMain extends Fragment {
                                         answersAdapter.notifyDataSetChanged();
                                 }
                                 //addCalculated
-                                if(loaded_length_answers==0) loaded_length_answers+=15;
+                                if(loaded_length_answers==0) loaded_length_answers+=result.length();
                                 else
                                     loaded_length_answers+=10;
                             }
@@ -538,6 +541,9 @@ public class FragmentCompeteMain extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
+        loaded_length_answers=0;
+        loaded_length_competition=0;
         LoadList();
+
     }
 }
