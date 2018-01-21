@@ -38,6 +38,7 @@ public class UserProfileServices {
     public static final String URL_RGISTER= "user/register";
     public static final String URL_LOGIN= "user/authentification";
     public static final String URL_SET_PROFILE_PICTURE="user/setprofilepicture";
+    public static final String URL_SET_USERNAME="user/setusername";
 
     /** Constructeur privé */
     private UserProfileServices()
@@ -165,6 +166,15 @@ public class UserProfileServices {
        return user;
     }
 
+    public Boolean isFacebooklogged(Context context){
+        for (UserInfo user: FirebaseAuth.getInstance().getCurrentUser().getProviderData()) {
+            if (user.getProviderId().equals("facebook.com")) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     public Boolean is_verified(Context context){
         FirebaseAuth.getInstance().getCurrentUser().reload();
         if(DataBaseHandler.getInstance(context).getUser().isConfirmed()) return true;
@@ -210,5 +220,77 @@ public class UserProfileServices {
         return drawable;
     }
 
+
+    public void changeProfilePicture(String id, String picture,Context context ,final ServerCallbacks serverCallbacks){
+        Map<String, String> m = new HashMap<String, String>();
+        m.put("id", id);
+        m.put("profile_picture", picture);
+        final JSONObject jsonBody = new JSONObject(m);
+        JsonObjectRequest jsObjRequest = new JsonObjectRequest
+                (Request.Method.POST, IP + URL_SET_PROFILE_PICTURE, jsonBody, new Response.Listener<JSONObject>() {
+
+                    @Override
+                    public void onResponse(JSONObject response) {
+
+                        if (!response.has("Error")){
+                            //ok
+                            serverCallbacks.onSuccess(response);
+                        }
+                        else{
+                            //wrong entries
+                            serverCallbacks.onWrong(response);
+                        }
+                    }
+                }, new Response.ErrorListener() {
+
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        //connection problem
+                        serverCallbacks.onError(error);
+                    }
+                });
+        jsObjRequest.setRetryPolicy(new DefaultRetryPolicy(
+                10000,//timeout
+                3,//retry
+                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+
+        AppSingleton.getInstance(context).addToRequestQueue(jsObjRequest, "pic");
+    }
+
+    public void changeUsername(String id, String username,Context context ,final ServerCallbacks serverCallbacks){
+        Map<String, String> m = new HashMap<String, String>();
+        m.put("id", id);
+        m.put("username", username);
+        final JSONObject jsonBody = new JSONObject(m);
+        JsonObjectRequest jsObjRequest = new JsonObjectRequest
+                (Request.Method.POST, IP + URL_SET_USERNAME, jsonBody, new Response.Listener<JSONObject>() {
+
+                    @Override
+                    public void onResponse(JSONObject response) {
+
+                        if (!response.has("Error")){
+                            //ok
+                            serverCallbacks.onSuccess(response);
+                        }
+                        else{
+                            //wrong entries
+                            serverCallbacks.onWrong(response);
+                        }
+                    }
+                }, new Response.ErrorListener() {
+
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        //connection problem
+                        serverCallbacks.onError(error);
+                    }
+                });
+        jsObjRequest.setRetryPolicy(new DefaultRetryPolicy(
+                10000,//timeout
+                3,//retry
+                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+
+        AppSingleton.getInstance(context).addToRequestQueue(jsObjRequest, "name");
+    }
 
 }

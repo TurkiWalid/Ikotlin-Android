@@ -110,6 +110,10 @@ dependencies {
     //firebase authentification
     compile 'com.google.firebase:firebase-auth:9.6.1'
 
+    //firebase storage
+
+    compile 'com.google.firebase:firebase-storage:9.6.1'
+
     // Required only if Facebook login support is required
     compile 'com.facebook.android:facebook-android-sdk:4.27.0'
 

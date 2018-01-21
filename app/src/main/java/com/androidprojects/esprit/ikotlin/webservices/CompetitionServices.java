@@ -454,8 +454,6 @@ public class CompetitionServices {
                 DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
 
         AppSingleton.getInstance(context).addToRequestQueue(jsonObjRequest, "runCode");
-
-
     }
 
 }

@@ -1,5 +1,6 @@
 package com.androidprojects.esprit.ikotlin.activities;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
@@ -67,6 +68,8 @@ public class LoginActivity extends AppCompatActivity {
     //facebook to firebase callback
     CallbackManager mCallbackManager;
 
+    ProgressDialog progressDialog;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -85,13 +88,15 @@ public class LoginActivity extends AppCompatActivity {
         LoginManager.getInstance().logOut();
         //init facebook login
         logwithFacebookInit();
+        progressDialog=new ProgressDialog(this);
     }
 
     /**
      * ---------- FIREBASE (and mysql) LOGIN ---------
      **/
     public void login(View view) {
-
+        progressDialog.setMessage("Welcome to IKotlin.");
+        progressDialog.show();
         final String userEmail = emailText.getText().toString();
         final String userPassword = passwordText.getText().toString();
 

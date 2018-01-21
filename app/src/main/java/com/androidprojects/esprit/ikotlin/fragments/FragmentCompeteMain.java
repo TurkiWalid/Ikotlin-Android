@@ -9,13 +9,11 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.Button;
-import android.widget.ImageButton;
 import android.widget.Spinner;
 import android.widget.Toast;
 
@@ -169,13 +167,15 @@ public class FragmentCompeteMain extends Fragment {
                                         competitionAdapter.notifyDataSetChanged();
                                 }
                                 //addCalculated
-                                if(loaded_length_competition==0) loaded_length_competition+=result.length();
+                                //Log.d("restult",array.length()+" #  "+loaded_length_competition);
+                                if(loaded_length_competition==0) loaded_length_competition+=array.length();
                                 else
                                     loaded_length_competition+=10;
                             }
                             competeAnswerSwipeRefresh.setRefreshing(false);
                             competeSwipeRefresh.setRefreshing(false);
                             loading=false;
+                            enableLevels();
                         }
 
                         @Override
@@ -183,6 +183,7 @@ public class FragmentCompeteMain extends Fragment {
                             loading=false;
                             competeAnswerSwipeRefresh.setRefreshing(false);
                             competeSwipeRefresh.setRefreshing(false);
+                            enableLevels();
                         }
 
                         @Override
@@ -190,6 +191,7 @@ public class FragmentCompeteMain extends Fragment {
                             loading=false;
                             competeAnswerSwipeRefresh.setRefreshing(false);
                             competeSwipeRefresh.setRefreshing(false);
+                            enableLevels();
                         }
                     });
 
@@ -244,13 +246,14 @@ public class FragmentCompeteMain extends Fragment {
                                         answersAdapter.notifyDataSetChanged();
                                 }
                                 //addCalculated
-                                if(loaded_length_answers==0) loaded_length_answers+=result.length();
+                                if(loaded_length_answers==0) loaded_length_answers+=array.length();
                                 else
                                     loaded_length_answers+=10;
                             }
                             competeAnswerSwipeRefresh.setRefreshing(false);
                             competeSwipeRefresh.setRefreshing(false);
                             loading=false;
+                            enableLevels();
                         }
 
                         @Override
@@ -258,6 +261,7 @@ public class FragmentCompeteMain extends Fragment {
                             loading=false;
                             competeAnswerSwipeRefresh.setRefreshing(false);
                             competeSwipeRefresh.setRefreshing(false);
+                            enableLevels();
                         }
 
                         @Override
@@ -265,6 +269,7 @@ public class FragmentCompeteMain extends Fragment {
                             loading=false;
                             competeAnswerSwipeRefresh.setRefreshing(false);
                             competeSwipeRefresh.setRefreshing(false);
+                            enableLevels();
                         }
                     });
 
@@ -352,6 +357,7 @@ public class FragmentCompeteMain extends Fragment {
                     orderSpinner.setVisibility(View.GONE);
                 else
                     orderSpinner.setVisibility(View.VISIBLE);
+                disabbleLevels();
                 LoadList();
             }
         });
@@ -361,7 +367,7 @@ public class FragmentCompeteMain extends Fragment {
         bL1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                disabbleLevels();
                 level=1;
 
                 bL2.setBackgroundColor(getContext().getResources().getColor(R.color.material_blue_grey_80));
@@ -380,7 +386,7 @@ public class FragmentCompeteMain extends Fragment {
         bL2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                disabbleLevels();
                 level=2;
 
                 bL1.setBackgroundColor(getContext().getResources().getColor(R.color.material_blue_grey_80));
@@ -399,7 +405,7 @@ public class FragmentCompeteMain extends Fragment {
         bL3.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                disabbleLevels();
                 level=3;
 
                 bL2.setBackgroundColor(getContext().getResources().getColor(R.color.material_blue_grey_80));
@@ -418,7 +424,7 @@ public class FragmentCompeteMain extends Fragment {
         bL4.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                disabbleLevels();
                 level=4;
 
                 bL2.setBackgroundColor(getContext().getResources().getColor(R.color.material_blue_grey_80));
@@ -437,7 +443,7 @@ public class FragmentCompeteMain extends Fragment {
         bL5.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                disabbleLevels();
                 level=5;
 
                 bL2.setBackgroundColor(getContext().getResources().getColor(R.color.material_blue_grey_80));
@@ -456,7 +462,7 @@ public class FragmentCompeteMain extends Fragment {
         bL6.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                disabbleLevels();
                 level=6;
 
                 bL2.setBackgroundColor(getContext().getResources().getColor(R.color.material_blue_grey_80));
@@ -533,17 +539,40 @@ public class FragmentCompeteMain extends Fragment {
         addButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(getActivity(),"not built yet",Toast.LENGTH_SHORT).show();
+                getActivity().getSupportFragmentManager().beginTransaction()
+                        .replace(R.id.root_compete,new FragmentCompeteAdd())
+                        .addToBackStack(null)
+                        .commit();
             }
         });
     }
 
-    @Override
+
+    public void disabbleLevels(){
+        bL1.setEnabled(false);
+        bL2.setEnabled(false);
+        bL3.setEnabled(false);
+        bL4.setEnabled(false);
+        bL5.setEnabled(false);
+        bL6.setEnabled(false);
+    }
+
+    public void enableLevels(){
+        bL1.setEnabled(true);
+        bL2.setEnabled(true);
+        bL3.setEnabled(true);
+        bL4.setEnabled(true);
+        bL5.setEnabled(true);
+        bL6.setEnabled(true);
+    }
+
+
+   /* @Override
     public void onResume() {
         super.onResume();
         loaded_length_answers=0;
         loaded_length_competition=0;
         LoadList();
 
-    }
+    }*/
 }

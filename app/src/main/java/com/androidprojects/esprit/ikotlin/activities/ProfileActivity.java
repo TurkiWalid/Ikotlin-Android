@@ -9,6 +9,7 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -28,6 +29,8 @@ public class ProfileActivity extends AppCompatActivity {
     private ViewPager viewPager;
     private User user;
 
+    ImageButton profileSettingsBtn;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -43,10 +46,13 @@ public class ProfileActivity extends AppCompatActivity {
         /** the tabLayout **/
         tabLayout = findViewById(R.id.profileTabs);
         viewPager = findViewById(R.id.viewpager_profileTabs);
+        profileSettingsBtn=findViewById(R.id.profileSettingsBtn);
         adapter = new ProfileTabsAdapter(getSupportFragmentManager());
         viewPager.setAdapter(adapter);
         tabLayout.setupWithViewPager(viewPager);
 
+        if(UserProfileServices.getInstance().isFacebooklogged(this)) profileSettingsBtn.setVisibility(View.GONE);
+        else
         /*** profile settings click ***/
         findViewById(R.id.profileSettingsBtn).setOnClickListener(new View.OnClickListener() {
             @Override

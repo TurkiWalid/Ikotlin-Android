@@ -41,59 +41,32 @@
             android:id="@+id/editProfilePic"
             android:layout_width="wrap_content"
             android:layout_height="20dp"
-            android:layout_marginTop="5dp"
+            android:layout_marginTop="40dp"
             android:layout_below="@+id/userImgProfile_inSettings"
             android:layout_centerHorizontal="true"
             android:text="Change Avatar "/>
-        <TextView
-            android:id="@+id/removeProfilePic"
-            android:layout_width="wrap_content"
-            android:layout_height="20dp"
-            android:layout_below="@+id/editProfilePic"
-            android:layout_centerHorizontal="true"
-            android:text="Remove Avatar "/>
         <com.rey.material.widget.EditText
             android:id="@+id/changeNameTxt"
             android:layout_width="fill_parent"
             android:layout_height="50dp"
-            android:layout_below="@+id/editProfilePic"
+            android:layout_below="@id/editProfilePic"
             android:hint="Name"
             app:et_dividerColor="@color/base_color_1"
             app:et_dividerHeight="2dp"
+            android:layout_marginTop="40dp"
             app:et_labelEnable="true"
             app:et_labelTextColor="@color/base_color_1"
             app:et_labelTextSize="15dp" />
-        <com.rey.material.widget.EditText
-            android:id="@+id/changeEmailTxt"
-            android:layout_width="fill_parent"
-            android:layout_height="50dp"
-            android:layout_below="@+id/changeNameTxt"
-            android:hint="Email"
-            app:et_dividerColor="@color/base_color_1"
-            app:et_dividerHeight="2dp"
-            app:et_labelEnable="true"
-            app:et_labelTextColor="@color/base_color_1"
-            app:et_labelTextSize="15dp"/>
-        <com.rey.material.widget.EditText
-            android:id="@+id/changeCountryTxt"
-            android:layout_width="fill_parent"
-            android:layout_height="50dp"
-            android:layout_below="@+id/changeEmailTxt"
-            android:hint="Country"
-            app:et_dividerColor="@color/base_color_1"
-            app:et_dividerHeight="2dp"
-            app:et_labelEnable="true"
-            app:et_labelTextColor="@color/base_color_1"
-            app:et_labelTextSize="15dp"/>
         <Button
+            android:id="@+id/save_profile"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Save"
-            android:gravity="right|center"
             android:background="@null"
-            android:layout_below="@+id/changeCountryTxt"
+            android:layout_below="@id/changeNameTxt"
             android:textColor="@color/base_color_1"
             android:textSize="7pt"
+            android:layout_marginTop="20dp"
             android:layout_alignParentRight="true"/>
 
     </RelativeLayout>

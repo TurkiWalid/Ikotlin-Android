@@ -198,7 +198,7 @@ public class ShareFragment extends Fragment {
                                         adapter.notifyDataSetChanged();
                                 }
                                 //addCalculated
-                                if(loaded_length==0) loaded_length+=result.length();
+                                if(loaded_length==0) loaded_length+=array.length();
                                 else
                                     loaded_length+=10;
                             }
