@@ -38,14 +38,17 @@
         <com.rey.material.widget.EditText
             android:id="@+id/emailText_login"
             android:layout_width="match_parent"
-            android:layout_height="50dp"
+            android:layout_height="wrap_content"
             android:layout_marginTop="50px"
             android:hint=" E-mail"
             app:et_dividerColor="@color/base_color_1"
+            app:et_dividerErrorColor="#FFFF0000"
             app:et_dividerHeight="2dp"
             app:et_labelEnable="true"
             app:et_labelTextColor="@color/base_color_1"
-            app:et_labelTextSize="15dp" />
+            app:et_labelTextSize="15dp"
+            app:et_supportMode="helper"
+            app:et_supportTextErrorColor="#FFFF0000" />
 
         <com.scottyab.showhidepasswordedittext.ShowHidePasswordEditText
             android:id="@+id/pswText"
@@ -55,6 +58,9 @@
             android:backgroundTint="@color/base_color_1"
             android:hint="Password"
             android:inputType="textPassword"
+            app:et_supportMode="helper"
+            app:et_supportTextErrorColor="#FFFF0000"
+            app:et_dividerErrorColor="#FFFF0000"
             android:textSize="15dp" />
         <!--<com.rey.material.widget.EditText
             android:id="@+id/pswText"

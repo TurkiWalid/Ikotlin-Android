@@ -55,7 +55,6 @@ import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 
 public class LoginActivity extends AppCompatActivity {
-    public static String IP;
     com.rey.material.widget.EditText emailText;
     com.scottyab.showhidepasswordedittext.ShowHidePasswordEditText passwordText;
     private FirebaseAuth auth;
@@ -82,7 +81,6 @@ public class LoginActivity extends AppCompatActivity {
         passwordText = findViewById(R.id.pswText);
         progressBar = findViewById(R.id.login_progress);
 
-        IP = Configuration.IP;
         auth = FirebaseAuth.getInstance();
         //init facebook (just in case)
         LoginManager.getInstance().logOut();
@@ -95,8 +93,7 @@ public class LoginActivity extends AppCompatActivity {
      * ---------- FIREBASE (and mysql) LOGIN ---------
      **/
     public void login(View view) {
-        progressDialog.setMessage("Welcome to IKotlin.");
-        progressDialog.show();
+
         final String userEmail = emailText.getText().toString();
         final String userPassword = passwordText.getText().toString();
 
@@ -112,7 +109,9 @@ public class LoginActivity extends AppCompatActivity {
 
         /***check internet connection***/
         if (Configuration.isOnline(getApplicationContext())) {
-            progressBar.setVisibility(View.VISIBLE);
+            progressDialog.setMessage("Welcome to IKotlin.");
+            progressDialog.show();
+            //progressBar.setVisibility(View.VISIBLE);
             //login via firebase
             auth.signInWithEmailAndPassword(userEmail, userPassword).addOnCompleteListener
                     (LoginActivity.this, new OnCompleteListener<AuthResult>() {
@@ -351,7 +350,6 @@ public class LoginActivity extends AppCompatActivity {
      **/
 
     public void loginWithLinkedin(View v){
-
 
         LISessionManager.getInstance(getApplicationContext())
                 .init(this, buildScope(), new AuthListener() {

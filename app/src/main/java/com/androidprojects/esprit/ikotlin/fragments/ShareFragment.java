@@ -8,6 +8,7 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -57,6 +58,7 @@ public class ShareFragment extends Fragment {
         super.onCreate(savedInstanceState);
         loaded_length=0;
     }
+
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
@@ -115,6 +117,7 @@ public class ShareFragment extends Fragment {
 
         //add scrollListener to the recycler view
         attach_scrollListener();
+
     }
 
 
@@ -152,7 +155,6 @@ public class ShareFragment extends Fragment {
             forumRececyclerView.removeAllViews();
             listForum.clear();
         }
-
         //Toast.makeText(getContext(),"Loaded : "+loaded_length,Toast.LENGTH_LONG).show();
         if(FirebaseAuth.getInstance().getCurrentUser()!=null){
             swipeRefreshLayout.setRefreshing(true);
@@ -193,9 +195,10 @@ public class ShareFragment extends Fragment {
                                     if(adapter==null){
                                         adapter=new ShareListAdapter(listForum,getContext());
                                         forumRececyclerView.setAdapter(adapter);
+
                                     }
                                     else
-                                        adapter.notifyDataSetChanged();
+                                    { adapter.notifyDataSetChanged();}
                                 }
                                 //addCalculated
                                 if(loaded_length==0) loaded_length+=array.length();

@@ -37,37 +37,48 @@
         <com.rey.material.widget.EditText
             android:id="@+id/emailText_signup"
             android:layout_width="match_parent"
-            android:layout_height="50dp"
+            android:layout_height="wrap_content"
             android:layout_marginTop="35px"
+            android:hint=" E-mail"
+            app:et_dividerColor="@color/base_color_1"
+            app:et_dividerErrorColor="#FFFF0000"
+            app:et_dividerHeight="2dp"
             app:et_labelEnable="true"
             app:et_labelTextColor="@color/base_color_1"
-            app:et_dividerColor="@color/base_color_1"
             app:et_labelTextSize="15dp"
-            app:et_dividerHeight="2dp"
-            android:hint=" E-mail" />
+            app:et_supportMode="helper"
+            app:et_supportTextErrorColor="#FFFF0000" />
+
         <com.rey.material.widget.EditText
             android:id="@+id/userNameTxt"
             android:layout_width="match_parent"
-            android:layout_height="50dp"
+            android:layout_height="wrap_content"
             android:layout_marginTop="50px"
+            android:hint=" Username"
+            app:et_dividerColor="@color/base_color_1"
+            app:et_dividerErrorColor="#FFFF0000"
+            app:et_dividerHeight="2dp"
             app:et_labelEnable="true"
             app:et_labelTextColor="@color/base_color_1"
-            app:et_dividerColor="@color/base_color_1"
             app:et_labelTextSize="15dp"
-            app:et_dividerHeight="2dp"
-            android:hint=" Username" />
+            app:et_supportMode="helper"
+            app:et_supportTextErrorColor="#FFFF0000" />
+
         <com.rey.material.widget.EditText
             android:id="@+id/pswText"
             android:layout_width="match_parent"
-            android:layout_height="50dp"
+            android:layout_height="wrap_content"
             android:layout_marginTop="50px"
+            android:hint=" Password"
+            android:password="true"
+            app:et_dividerColor="@color/base_color_1"
+            app:et_dividerErrorColor="#FFFF0000"
+            app:et_dividerHeight="2dp"
             app:et_labelEnable="true"
             app:et_labelTextColor="@color/base_color_1"
-            app:et_dividerColor="@color/base_color_1"
             app:et_labelTextSize="15dp"
-            app:et_dividerHeight="2dp"
-            android:hint=" Password"
-            android:password="true"/>
+            app:et_supportMode="helper"
+            app:et_supportTextErrorColor="#FFFF0000" />
 
         <com.rey.material.widget.Button
             android:id="@+id/confirmSignup_btn"

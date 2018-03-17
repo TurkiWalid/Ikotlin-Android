@@ -229,7 +229,7 @@
                     android:id="@+id/compete_add_answer"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Submit"
+                    android:text="Save"
                     android:layout_gravity="end"
                     android:visibility="gone"
                     android:background="@color/float_transparent"

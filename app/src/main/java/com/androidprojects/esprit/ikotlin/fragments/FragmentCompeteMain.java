@@ -567,12 +567,12 @@ public class FragmentCompeteMain extends Fragment {
     }
 
 
-   /* @Override
+    @Override
     public void onResume() {
         super.onResume();
         loaded_length_answers=0;
         loaded_length_competition=0;
         LoadList();
 
-    }*/
+    }
 }
