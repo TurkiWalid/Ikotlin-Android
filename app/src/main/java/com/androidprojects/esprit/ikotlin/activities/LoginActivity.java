@@ -133,7 +133,7 @@ public class LoginActivity extends AppCompatActivity {
                                 UserProfileServices.getInstance().markLoggedUserWebService(uid, LoginActivity.this, new ServerCallbacks() {
                                     @Override
                                     public void onSuccess(JSONObject result) {
-
+                                        progressDialog.dismiss();
                                         User user;
                                         user = UserProfileServices.getInstance().get_user_from_json(result);
                                         DataBaseHandler.getInstance(LoginActivity.this).saveUser(user);

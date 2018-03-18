@@ -7,11 +7,11 @@
         android:icon="@drawable/ic_profile"
         app:showAsAction="always" >
     </item>
-    <item android:id="@+id/action_notifs"
+   <!-- <item android:id="@+id/action_notifs"
         android:title=""
         android:icon="@drawable/ic_notifs"
         app:showAsAction="always" >
-    </item>
+    </item>-->
     <item android:id="@+id/action_settings"
         android:title="Settings"
         app:showAsAction="never">

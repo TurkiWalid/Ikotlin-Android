@@ -8,6 +8,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -32,14 +33,10 @@ public class SettingsActivity extends ListActivity {
 
     private FirebaseAuth auth;
     ProgressDialog progressDialog;
+    int signoutpos = 4;
+    boolean ispass=true;
 
-    private static final String[] settingsContent = {
-            "Sep_ACCOUNT",
-            "Edit profile",
-            "Change password",
-            "Sep_",
-            "Sign out"
-    };
+    private static String[] settingsContent ;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,14 +52,47 @@ public class SettingsActivity extends ListActivity {
         ((TextView)v.findViewById(R.id.actionBarTitle)).setGravity(Gravity.CENTER_VERTICAL);
         getActionBar().setCustomView(v);
 
-        setListAdapter(new SettingsListAdapter(this,settingsContent));
+
         auth=FirebaseAuth.getInstance();
+
+        if(UserProfileServices.getInstance().isFacebooklogged(this)) {
+            settingsContent = new String[]{
+                    "Sep_ACCOUNT",
+                    "Edit profile",
+                    "Sep_",
+                    "Sign out"
+            };
+            signoutpos = 3;
+            ispass=false;
+        }
+        else {
+            settingsContent = new String[]{
+                    "Sep_ACCOUNT",
+                    "Edit profile",
+                    "Change password",
+                    "Sep_",
+                    "Sign out"
+            };
+            signoutpos = 4;
+            ispass=true;
+        }
+
+        setListAdapter(new SettingsListAdapter(this,settingsContent));
     }
 
     @Override
     protected void onListItemClick(ListView l, View v,int position,long id){
-      if(position==4){
+      if(position==signoutpos){
                 initSignOut();
+        }
+        if(position==1){
+            Intent i = new Intent(SettingsActivity.this,ProfileSettingsActivity.class);
+            startActivity(i);
+        }
+
+        if(position==2 && ispass){
+            Intent i = new Intent(SettingsActivity.this,PasswordChangeActivity.class);
+            startActivity(i);
         }
     }
 

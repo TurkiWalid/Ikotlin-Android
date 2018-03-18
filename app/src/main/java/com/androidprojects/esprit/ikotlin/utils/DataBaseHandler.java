@@ -5,6 +5,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
 
 import com.androidprojects.esprit.ikotlin.models.User;
 import com.google.firebase.auth.FirebaseAuth;
@@ -102,6 +103,7 @@ public class DataBaseHandler extends SQLiteOpenHelper {
         db.close();
     }
 
+
     public void updateUser(User user){
         FirebaseAuth.getInstance().getCurrentUser().reload();
         if(userExists()){
@@ -118,8 +120,9 @@ public class DataBaseHandler extends SQLiteOpenHelper {
             values.put(KEY_SKILL_CODER, user.getSkill_coder());
             values.put(KEY_CREATED, user.getCreated().getTimeInMillis());
             //UPDATE
-            db.update(TABLE_USER,values,"id = ?", new String[] {String.valueOf(user.getId())});
+             db.update(TABLE_USER,values,KEY_UID+" = ?", new String[] {String.valueOf(user.getId())});
             //CLOSE CONNECTION
+           // Log.e("base ",o.toString());
             db.close();
         }
         else
@@ -146,6 +149,7 @@ public class DataBaseHandler extends SQLiteOpenHelper {
     public User getUser(){
         FirebaseAuth.getInstance().getCurrentUser().reload();
         if(userExists()){
+
             SQLiteDatabase db= this.getReadableDatabase();
             String selectQuery="SELECT * FROM "+TABLE_USER;
             Cursor cursor = db.rawQuery(selectQuery, null);
@@ -158,6 +162,7 @@ public class DataBaseHandler extends SQLiteOpenHelper {
             User user=new User(cursor.getString(1),cursor.getString(2),cursor.getString(3),
                     last_log, cursor.getString(6), cursor.getInt(7),cursor.getInt(8),
                     cursor.getInt(9),FirebaseAuth.getInstance().getCurrentUser().isEmailVerified(),created);
+           // Log.e("getting user", user.toString());
             return user;
         }
         return null;

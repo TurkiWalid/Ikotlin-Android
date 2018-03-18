@@ -4,9 +4,12 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.provider.OpenableColumns;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Gravity;
@@ -18,19 +21,27 @@ import android.widget.Toast;
 
 import com.android.volley.VolleyError;
 import com.androidprojects.esprit.ikotlin.R;
+import com.androidprojects.esprit.ikotlin.models.User;
 import com.androidprojects.esprit.ikotlin.utils.Configuration;
 import com.androidprojects.esprit.ikotlin.utils.DataBaseHandler;
 import com.androidprojects.esprit.ikotlin.webservices.ServerCallbacks;
 import com.androidprojects.esprit.ikotlin.webservices.UserProfileServices;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 import com.rey.material.widget.EditText;
 import com.squareup.picasso.Picasso;
 
 import org.json.JSONObject;
+import org.json.JSONStringer;
 
+import java.io.IOException;
 import java.util.Random;
+import java.util.UUID;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
@@ -41,15 +52,24 @@ public class ProfileSettingsActivity extends AppCompatActivity {
     TextView editProfilePic;
     EditText changeNameTxt;
     Button save;
-    private StorageReference mStorageRef;
-    private static final int PICK_IMAGE_REQUEST = 1234;
+    Button upload_image;
+
+    private Uri filePath;
+    private final int PICK_IMAGE_REQUEST = 85;
 
     ProgressDialog progressDialog;
+
+    //Firebase
+    FirebaseStorage storage;
+    StorageReference storageReference;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profilesettings);
+
+        storage = FirebaseStorage.getInstance();
+        storageReference = storage.getReference();
 
         getSupportActionBar().setDisplayShowCustomEnabled(true);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
@@ -63,8 +83,9 @@ public class ProfileSettingsActivity extends AppCompatActivity {
         editProfilePic=findViewById(R.id.editProfilePic);
         changeNameTxt=findViewById(R.id.changeNameTxt);
         save=findViewById(R.id.save_profile);
+        upload_image = findViewById(R.id.upload_image_setting);
 
-        String name= DataBaseHandler.getInstance(getApplicationContext()).getUser().getUsername();
+        String name= DataBaseHandler.getInstance(ProfileSettingsActivity.this).getUser().getUsername();
         if(name!=null && !name.isEmpty())
         changeNameTxt.setText(name);
         else
@@ -72,15 +93,14 @@ public class ProfileSettingsActivity extends AppCompatActivity {
 
         progressDialog=new ProgressDialog(this);
 
-        if(DataBaseHandler.getInstance(getApplicationContext()).getUser().getPictureURL()!=null)
-            Picasso.with(this).load(Uri.parse(DataBaseHandler.getInstance(getApplicationContext()).getUser().getPictureURL())).into(userImgProfile);
+        if(DataBaseHandler.getInstance(ProfileSettingsActivity.this).getUser().getPictureURL()!=null)
+            Picasso.with(this).load(Uri.parse(DataBaseHandler.getInstance(ProfileSettingsActivity.this).getUser().getPictureURL())).into(userImgProfile);
         else{
             userImgProfile.setImageDrawable(UserProfileServices.getInstance().getEmptyProfimePicture(name));
         }
 
         attachClickOnEditAvatar();
         attachClickOnSave();
-        mStorageRef = FirebaseStorage.getInstance().getReference();
     }
 
     @Override
@@ -97,7 +117,9 @@ public class ProfileSettingsActivity extends AppCompatActivity {
                         String name=changeNameTxt.getText().toString().trim();
                         progressDialog.setMessage("Saving new data...");
                         progressDialog.show();
-                        DataBaseHandler.getInstance(getApplicationContext()).getUser().setUsername(name);
+                        User u = DataBaseHandler.getInstance(ProfileSettingsActivity.this).getUser();
+                        u.setUsername(name);
+                        DataBaseHandler.getInstance(ProfileSettingsActivity.this).updateUser(u);
                         UserProfileServices.getInstance().changeUsername(FirebaseAuth.getInstance().getCurrentUser().getUid(), name, getApplicationContext(), new ServerCallbacks() {
                             @Override
                             public void onSuccess(JSONObject result) {
@@ -105,6 +127,8 @@ public class ProfileSettingsActivity extends AppCompatActivity {
                                 if(progressDialog.isShowing()){
                                     progressDialog.dismiss();
                                 }
+                                Intent i = new Intent(ProfileSettingsActivity.this,HomeActivity.class);
+                                startActivity(i);
                             }
 
                             @Override
@@ -113,6 +137,8 @@ public class ProfileSettingsActivity extends AppCompatActivity {
                                 if(progressDialog.isShowing()){
                                     progressDialog.dismiss();
                                 }
+                                Intent i = new Intent(ProfileSettingsActivity.this,HomeActivity.class);
+                                startActivity(i);
                             }
 
                             @Override
@@ -121,6 +147,8 @@ public class ProfileSettingsActivity extends AppCompatActivity {
                                 if(progressDialog.isShowing()){
                                     progressDialog.dismiss();
                                 }
+                                Intent i = new Intent(ProfileSettingsActivity.this,HomeActivity.class);
+                                startActivity(i);
                             }
                         });
                     }
@@ -135,150 +163,125 @@ public class ProfileSettingsActivity extends AppCompatActivity {
         editProfilePic.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                chooseImage();
+            }
+        });
+        upload_image.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                uploadImage();
             }
         });
     }
-/*
-    public void showChoosePictureDialog()
-    {
 
-        Button btnUpload, btnDone, btnCancel;
-
-        final Dialog dialog = new Dialog(getContext());
-        dialog.setContentView(R.layout.dialog_choose_profile_picture);
-
-        btnUpload = dialog.findViewById(R.id.btn_dialog_pic_upload);
-        btnDone = dialog.findViewById(R.id.btn_dialog_pic_save);
-        btnCancel = dialog.findViewById(R.id.btn_dialog_pic_cancel);
-
-        ivCrop = dialog.findViewById(R.id.iv_dialog_Crop);
-
-        btnCancel.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dialog.dismiss();
-            }
-        });
-
-        btnDone.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                uploadFile(filePath);
-                dialog.dismiss();
-
-            }
-        });
-
-        btnUpload.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                showFileChooser();
-            }
-        });
-
-        dialog.show();
-
-    }
-
-    private void showFileChooser()
-    {
-        Log.d("upload", "onClick: in file chooser");
+    private void chooseImage() {
         Intent intent = new Intent();
         intent.setType("image/*");
         intent.setAction(Intent.ACTION_GET_CONTENT);
-        startActivityForResult(Intent.createChooser(intent, "Select an image"), PICK_IMAGE_REQUEST);
-
-        Log.d("upload", "onClick: after file chooser");
+        startActivityForResult(Intent.createChooser(intent, "Select Picture"), PICK_IMAGE_REQUEST);
     }
+
 
     @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-
-        if(requestCode == PICK_IMAGE_REQUEST && resultCode == getActivity().RESULT_OK && data != null && data.getData() != null)
+        if(requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK
+                && data != null && data.getData() != null )
         {
             filePath = data.getData();
-
             try {
-                Bitmap bitmap = MediaStore.Images.Media.getBitmap(getActivity().getContentResolver(), filePath);
-                imageViewMteek.setImageBitmap(bitmap);
-
-                //uploadFile();
-
-            } catch (IOException e) {
+                Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), filePath);
+                userImgProfile.setImageBitmap(bitmap);
+                upload_image.setVisibility(View.VISIBLE);
+            }
+            catch (IOException e)
+            {
                 e.printStackTrace();
+                upload_image.setVisibility(View.GONE);
             }
         }
-
     }
 
-    public void uploadFile (Uri filePath)
-    {
-        //Uri path = Uri.parse("android.resource://your.package.name/" + R.drawable.icon_usuario);
+    private void uploadImage() {
 
-        String filename = getRandomString(25);
-        String fileExt = getExt(filePath);
+        if(filePath != null)
+        {
+            final ProgressDialog progressDialog = new ProgressDialog(this);
+            progressDialog.setTitle("Uploading...");
+            progressDialog.show();
 
-        Log.d("xxxx", "upload: "+filename);
-        Log.d("xxxx", "upload: ext"+fileExt);
+            StorageReference ref = storageReference.child(UUID.randomUUID().toString());
+            ref.putFile(filePath)
+                    .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                        @Override
+                        public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                            progressDialog.dismiss();
+                            ProfileSettingsActivity.this.updateDatabase(taskSnapshot.getDownloadUrl().toString());
+                        }
+                    })
+                    .addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            progressDialog.dismiss();
+                            Toast.makeText(ProfileSettingsActivity.this, "Failed "+e.getMessage(), Toast.LENGTH_SHORT).show();
+                        }
+                    })
+                    .addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
+                        @Override
+                        public void onProgress(UploadTask.TaskSnapshot taskSnapshot) {
+                            double progress = (100.0*taskSnapshot.getBytesTransferred()/taskSnapshot
+                                    .getTotalByteCount());
+                            progressDialog.setMessage("Uploaded "+(int)progress+"%");
+                        }
+                    });
+        }
+    }
 
-        //imgTitle = filename+"."+fileExt;
+    public void updateDatabase(final String url_image){
+        User u = DataBaseHandler.getInstance(ProfileSettingsActivity.this).getUser();
+        u.setPictureUrl(url_image);
+        DataBaseHandler.getInstance(ProfileSettingsActivity.this).saveUser(u);
+        UserProfileServices.getInstance().changeProfilePicture(FirebaseAuth.getInstance().getCurrentUser().getUid(), url_image, this, new ServerCallbacks() {
+            @Override
+            public void onSuccess(JSONObject result) {
+                User u = DataBaseHandler.getInstance(ProfileSettingsActivity.this).getUser();
+                StorageReference photoRef = storage.getReferenceFromUrl(u.getPictureURL());
+                u.setPictureUrl(url_image);
+                DataBaseHandler.getInstance(ProfileSettingsActivity.this).updateUser(u);
+                Toast.makeText(ProfileSettingsActivity.this, "Profile picture saved", Toast.LENGTH_SHORT).show();
+                upload_image.setVisibility(View.GONE);
 
-        StorageReference riversRef = mStorageRef.child("images/"+filename+"."+fileExt);
 
-        riversRef.putFile(filePath)
-                .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                //deleting old
+                photoRef.delete().addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
-                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-
-
-                        Uri downloadUrl = taskSnapshot.getDownloadUrl();
-
-                        imgTitle = downloadUrl.toString();
-                        DashboardActivity.loggedinuser.setPic(imgTitle);
+                    public void onSuccess(Void aVoid) {
+                        // File deleted successfully
+                       // Log.d("del", "onSuccess: deleted file");
                     }
-                })
-                .addOnFailureListener(new OnFailureListener() {
+                }).addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception exception) {
-                        // Handle unsuccessful uploads
-                        // ...
+                        // Uh-oh, an error occurred!
+                      //  Log.d("del", "onFailure: did not delete file");
                     }
                 });
-
-    }
-*/
-    public String getExt(Uri uri) {
-        String result = null;
-        Log.d("uriiiii", "getExt: "+uri);
-        if (uri.getScheme().equals("content")) {
-            Cursor cursor = this.getContentResolver().query(uri, null, null, null, null);
-            try {
-                if (cursor != null && cursor.moveToFirst()) {
-                    result = cursor.getString(cursor.getColumnIndex(OpenableColumns.DISPLAY_NAME));
-                }
-            } finally {
-                cursor.close();
             }
-        }
-        if (result != null) {
-            int cut = result.lastIndexOf('.');
-            if (cut != -1) {
-                result = result.substring(cut + 1);
-            }
-        }
-        return result;
-    }
 
-    private static final String ALLOWED_CHARACTERS ="0123456789qwertyuiopasdfghjklzxcvbnm";
-    private static String getRandomString(final int sizeOfRandomString)
-    {
-        final Random random=new Random();
-        final StringBuilder sb=new StringBuilder(sizeOfRandomString);
-        for(int i=0;i<sizeOfRandomString;++i)
-            sb.append(ALLOWED_CHARACTERS.charAt(random.nextInt(ALLOWED_CHARACTERS.length())));
-        return sb.toString();
+            @Override
+            public void onError(VolleyError result) {
+                if(DataBaseHandler.getInstance(ProfileSettingsActivity.this).getUser().getPictureURL()!=null)
+                    Picasso.with(ProfileSettingsActivity.this).load(Uri.parse(DataBaseHandler.getInstance(ProfileSettingsActivity.this).getUser().getPictureURL())).into(userImgProfile);
+                Toast.makeText(ProfileSettingsActivity.this, "Problem saving new picture", Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onWrong(JSONObject result) {
+                if(DataBaseHandler.getInstance(ProfileSettingsActivity.this).getUser().getPictureURL()!=null)
+                    Picasso.with(ProfileSettingsActivity.this).load(Uri.parse(DataBaseHandler.getInstance(ProfileSettingsActivity.this).getUser().getPictureURL())).into(userImgProfile);
+                Toast.makeText(ProfileSettingsActivity.this, "Problem saving new picture", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
 }

@@ -42,9 +42,23 @@
             android:layout_width="wrap_content"
             android:layout_height="20dp"
             android:layout_marginTop="40dp"
-            android:layout_below="@+id/userImgProfile_inSettings"
+            android:layout_below="@id/userImgProfile_inSettings"
             android:layout_centerHorizontal="true"
             android:text="Change Avatar "/>
+        <Button
+            android:id="@+id/upload_image_setting"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Save image"
+            android:background="@null"
+            android:layout_below="@id/userImgProfile_inSettings"
+            android:textColor="@color/base_color_1"
+            android:textSize="7pt"
+            android:layout_marginTop="20dp"
+            android:layout_alignParentRight="true"
+            android:visibility="gone"
+            />
+
         <com.rey.material.widget.EditText
             android:id="@+id/changeNameTxt"
             android:layout_width="fill_parent"

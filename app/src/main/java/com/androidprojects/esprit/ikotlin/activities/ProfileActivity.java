@@ -41,7 +41,6 @@ public class ProfileActivity extends AppCompatActivity {
 
         //user=LoginActivity.loggedUser; /** why not using sqlite ?*/
         //user=FirebaseAuth.getInstance().getCurrentUser();
-        user= DataBaseHandler.getInstance(getApplicationContext()).getUser();
 
         /** the tabLayout **/
         tabLayout = findViewById(R.id.profileTabs);
@@ -60,19 +59,32 @@ public class ProfileActivity extends AppCompatActivity {
                     startActivity(new Intent(getApplicationContext(),ProfileSettingsActivity.class));
             }
         });
+    }
 
-
+    @Override
+    protected void onResume() {
+        super.onResume();
+        User user2 = user;
+        user= DataBaseHandler.getInstance(getApplicationContext()).getUser();
         if(user!=null){
             /** fields data **/
+            if(user2 == null || !user.getUsername().equals(user2.getUsername()))
             ((TextView) findViewById(R.id.fullNameInProfile)).setText((user.getUsername().isEmpty()?user.getFirstName():user.getUsername()));
-            Log.d("profileI","im here");
-            Log.d("profileI",user.toString());
-            if(user.getPictureURL()!=null){
-                Picasso.with(getApplicationContext()).load(Uri.parse(user.getPictureURL())).into((ImageView)findViewById(R.id.userImgProfile));
-
+            //Log.d("profileI","im here");
+            //Log.d("profileI",user.toString());
+            if(user2 == null) {
+                if (user.getPictureURL() != null) {
+                    Picasso.with(getApplicationContext()).load(Uri.parse(user.getPictureURL())).into((ImageView) findViewById(R.id.userImgProfile));
+                } else
+                    ((ImageView) findViewById(R.id.userImgProfile)).setImageDrawable(UserProfileServices.getInstance().getEmptyProfimePicture(user.getUsername()));
             }
-            else
-                ((ImageView)findViewById(R.id.userImgProfile)).setImageDrawable(UserProfileServices.getInstance().getEmptyProfimePicture(user.getUsername()));
+            else if (!user2.getPictureURL().equals(user.getPictureURL())){
+                if (user.getPictureURL() != null) {
+                    Picasso.with(getApplicationContext()).load(Uri.parse(user.getPictureURL())).into((ImageView) findViewById(R.id.userImgProfile));
+                } else
+                    ((ImageView) findViewById(R.id.userImgProfile)).setImageDrawable(UserProfileServices.getInstance().getEmptyProfimePicture(user.getUsername()));
+            }
+
         }
     }
 
