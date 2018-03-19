@@ -29,6 +29,7 @@ import com.daimajia.numberprogressbar.NumberProgressBar;
 import com.google.firebase.auth.FirebaseAuth;
 
 import org.json.JSONObject;
+import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 
@@ -74,12 +75,12 @@ public class CurrentUserCoursesList_Adapter extends BaseAdapter {
      * + perform course rest in DB
      * ***/
     @Override
-    public View getView(final int position, final View convertView, ViewGroup parent) {
+    public View getView(final int position, View convertView, ViewGroup parent) {
         final View rowView= ((LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE)).inflate(R.layout.currentusercourses_list_item,parent, false);
         ((ImageView)rowView.findViewById(R.id.userCourseIcon)).setImageResource(currentUserCourses.get(position).getIconId());
         ((TextView)rowView.findViewById(R.id.userCourseTitle)).setText(currentUserCourses.get(position).getTitle());
         ((NumberProgressBar)rowView.findViewById(R.id.userCourseProgress)).setProgress(currentUserCourses.get(position).getAdvancement());
-        ((Button)rowView.findViewById(R.id.delete_course)).setOnClickListener(new View.OnClickListener() {
+        ((TextView)rowView.findViewById(R.id.delete_course_from_list)).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 new AlertDialog.Builder(context)
@@ -106,8 +107,9 @@ public class CurrentUserCoursesList_Adapter extends BaseAdapter {
                             }
                         })
                         .show();
-            }
+             }
         });
+
         /*((ListItemView) rowView.findViewById(R.id.userCoursesListItem )).setOnMenuItemClickListener(new ListItemView.OnMenuItemClickListener() {
             @Override
             public void onActionMenuItemSelected(final MenuItem item) {

@@ -16,6 +16,7 @@ import android.widget.Toast;
 import com.android.volley.VolleyError;
 import com.androidprojects.esprit.ikotlin.R;
 import com.androidprojects.esprit.ikotlin.adapters.PostsAdapter;
+import com.androidprojects.esprit.ikotlin.adapters.ShareListAdapter;
 import com.androidprojects.esprit.ikotlin.models.ForumQuestion;
 import com.androidprojects.esprit.ikotlin.utils.Configuration;
 import com.androidprojects.esprit.ikotlin.webservices.ForumServices;
@@ -102,6 +103,9 @@ public class PostsFragment extends Fragment {
                 }
             }
         });
+
+        adapter = new ShareListAdapter(new ArrayList<ForumQuestion>(),getActivity());
+        forumRececyclerView.setAdapter(adapter);
         //add scrollListener to the recycler view
         attach_scrollListener();
         load_forum(0);

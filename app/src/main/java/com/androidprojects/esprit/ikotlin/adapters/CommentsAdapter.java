@@ -172,7 +172,8 @@ public class CommentsAdapter extends RecyclerView.Adapter<CommentsAdapter.Commen
                                     public void onSuccess(JSONObject result) {
                                         if(progressDialog.isShowing())
                                         progressDialog.dismiss();
-                                        holder.itemView.setVisibility(View.GONE);
+                                        forumAnswersList.remove(position);
+                                        CommentsAdapter.this.notifyDataSetChanged();
                                     }
 
                                     @Override

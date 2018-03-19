@@ -125,6 +125,7 @@ public class ForumShowFragment extends Fragment {
             codeView=getActivity().findViewById(R.id.code_view);
             forumEditButton=getActivity().findViewById(R.id.forum_edit_button);
             editedText=getActivity().findViewById(R.id.forum_show_edited);
+
             //listeners
             ratingUp.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -202,13 +203,17 @@ public class ForumShowFragment extends Fragment {
 
             /** comment elements*/
             commentsRececyclerView= getActivity().findViewById(R.id.comments_container_list);
+            /** temp */
+            adapter = new CommentsAdapter(new ArrayList<Answer>(),getActivity());
+            commentsRececyclerView.setAdapter(adapter);
             swipeRefreshLayout=getActivity().findViewById(R.id.comment_refresh_layout);
             listComments=new ArrayList<>();
             noComments_textView=getActivity().findViewById(R.id.no_comments_txt);
 
                 layoutManager = new LinearLayoutManager(getContext());
                 commentsRececyclerView.setLayoutManager(layoutManager);
-            /** swipe to refresh */
+
+        /** swipe to refresh */
             swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
                 @Override
                 public void onRefresh() {
@@ -226,7 +231,6 @@ public class ForumShowFragment extends Fragment {
             setActionListenerToAdd();
             load_comments(0);
             attach_scrollListener();
-
 
     }
 

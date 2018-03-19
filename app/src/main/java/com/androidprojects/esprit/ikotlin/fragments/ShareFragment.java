@@ -76,6 +76,8 @@ public class ShareFragment extends Fragment {
             }
         };
         forumRececyclerView.setItemAnimator(animator);
+        adapter = new ShareListAdapter(new ArrayList<ForumQuestion>(),getActivity());
+        forumRececyclerView.setAdapter(adapter);
         //Affect views
         noConenction_textView = getActivity().findViewById(R.id.no_connection_shareFragment);
         swipeRefreshLayout = getActivity().findViewById(R.id.share_refresh);

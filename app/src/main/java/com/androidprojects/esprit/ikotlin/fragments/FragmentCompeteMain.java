@@ -106,6 +106,12 @@ public class FragmentCompeteMain extends Fragment {
         competitionList=new ArrayList<>();
         answersList=new ArrayList<>();
 
+        /** temp */
+        competitionAdapter = new CompetitionAdapter(new ArrayList<Competition>(),getActivity());
+        answersAdapter = new CompetitionAnswerAdapter(new ArrayList<CompetitionAnswer>(),getActivity());
+        competitionsRecyclerView.setAdapter(competitionAdapter);
+        answersRecyclerView.setAdapter(answersAdapter);
+
         attachSwipeRefreshListener();
         attachLevelButtonsListeners();
         attachToggleListener();

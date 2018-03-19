@@ -3,6 +3,7 @@ package com.androidprojects.esprit.ikotlin.fragments;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -43,6 +44,7 @@ public class LearnFragment_currentUserCourses extends Fragment {
         ((ListView)view.findViewById(R.id.myCoursesLv)).setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Log.e("clicked",""+position);
                getActivity().getSupportFragmentManager().beginTransaction()
                         .replace(R.id.root_learFragment,
                                 LearnFragment_course.newInstance(courseTitleToCoursePosition(((TextView)view.findViewById(R.id.userCourseTitle)).getText().toString())))
