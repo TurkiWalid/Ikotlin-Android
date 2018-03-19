@@ -9,7 +9,7 @@ import android.net.NetworkInfo;
  */
 
 public class Configuration {
-    public final static String IP="http://ikotlin.000webhostapp.com/web/";
+    public final static String IP="http://41.226.11.243:10080/ikotlin/public/web/app.php/";
 
     // TCP/HTTP/DNS (depending on the port, 53=DNS, 80=HTTP, etc.)
     public static boolean isOnline(Context context) {

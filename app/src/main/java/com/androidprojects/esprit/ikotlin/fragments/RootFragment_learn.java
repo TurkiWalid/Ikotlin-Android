@@ -49,6 +49,7 @@ public class RootFragment_learn extends Fragment {
             /** get all current user's taken courses*/
             /** add them to currentUserCourses list and notify the adapter**/
             LearnFragment_currentUserCourses currentUserCoursesFragment = new LearnFragment_currentUserCourses();
+            currentUserCoursesFragment.currentUserCourses.clear();
             for (int i = 0; i < coursesTaken.length; i++) {
                 currentUserCoursesFragment.currentUserCourses.add(AllCourses.getCourse(coursesTaken[i]));
             }

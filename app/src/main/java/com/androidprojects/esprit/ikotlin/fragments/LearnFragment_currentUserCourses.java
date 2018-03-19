@@ -44,7 +44,7 @@ public class LearnFragment_currentUserCourses extends Fragment {
         ((ListView)view.findViewById(R.id.myCoursesLv)).setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Log.e("clicked",""+position);
+                //Log.e("clicked",""+position);
                getActivity().getSupportFragmentManager().beginTransaction()
                         .replace(R.id.root_learFragment,
                                 LearnFragment_course.newInstance(courseTitleToCoursePosition(((TextView)view.findViewById(R.id.userCourseTitle)).getText().toString())))
