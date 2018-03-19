@@ -36,6 +36,7 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FacebookAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.UserInfo;
 import com.google.gson.Gson;
 import com.linkedin.platform.APIHelper;
 import com.linkedin.platform.LISessionManager;
@@ -209,13 +210,13 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onCancel() {
                 //Log.i("facebook_login","canceled");
-                Toast.makeText(getApplicationContext(),"Something happened while Connecting to facebook",Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(),"Could not connect with facebook",Toast.LENGTH_SHORT).show();
             }
 
             @Override
             public void onError(FacebookException error) {
                 //Log.i("facebook_login","error : "+error);
-                Toast.makeText(getApplicationContext(),"Error Connecting to facebook",Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(),"Error Connecting with facebook",Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -228,7 +229,7 @@ public class LoginActivity extends AppCompatActivity {
 
 
         /** causes facebook error */
-        if(!iFfacebok){
+        if(!iFfacebok && resultCode == RESULT_OK){
             LISessionManager.getInstance(getApplicationContext())
                     .onActivityResult(this,
                             requestCode, resultCode, data);
@@ -250,7 +251,7 @@ public class LoginActivity extends AppCompatActivity {
                         if (task.isSuccessful()) {
                             // Sign in success, update UI with the signed-in user's information
                             final FirebaseUser user = auth.getCurrentUser();
-                            Log.d("photo",user.getPhotoUrl().toString());
+
                             Toast.makeText(LoginActivity.this,"Welcome "+user.getDisplayName(),
                                     Toast.LENGTH_SHORT).show();
 
@@ -259,15 +260,50 @@ public class LoginActivity extends AppCompatActivity {
                                 @Override
                                 public void onSuccess(JSONObject result) {
 
-                                    User user;
-                                    user = UserProfileServices.getInstance().get_user_from_json(result);
-                                    user.setPictureUrl(FirebaseAuth.getInstance().getCurrentUser().getPhotoUrl().toString());
-                                    DataBaseHandler.getInstance(LoginActivity.this).saveUser(user);
-                                    //Log.d("user",user.toString());
-                                    Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
-                                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
-                                    startActivity(intent);
-                                    finish();
+
+                                    final User user = UserProfileServices.getInstance().get_user_from_json(result);
+                                    String facebookpic="";
+                                    for(UserInfo profile : FirebaseAuth.getInstance().getCurrentUser().getProviderData()) {
+                                        facebookpic = profile.getUid();
+                                    }
+                                   // Log.d("photo","https://graph.facebook.com/" + facebookUserId + "/picture?height=500");
+                                    facebookpic = "https://graph.facebook.com/" + facebookpic + "/picture?height=500";
+                                    user.setPictureUrl(facebookpic);
+                                    UserProfileServices.getInstance().changeProfilePicture(user.getId(), facebookpic, LoginActivity.this, new ServerCallbacks() {
+                                        @Override
+                                        public void onSuccess(JSONObject result) {
+                                            DataBaseHandler.getInstance(LoginActivity.this).saveUser(user);
+
+                                            //Log.d("user",user.toString());
+                                            Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
+                                            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+                                            startActivity(intent);
+                                            finish();
+                                        }
+
+                                        @Override
+                                        public void onError(VolleyError result) {
+                                            DataBaseHandler.getInstance(LoginActivity.this).saveUser(user);
+
+                                            //Log.d("user",user.toString());
+                                            Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
+                                            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+                                            startActivity(intent);
+                                            finish();
+                                        }
+
+                                        @Override
+                                        public void onWrong(JSONObject result) {
+                                            DataBaseHandler.getInstance(LoginActivity.this).saveUser(user);
+
+                                            //Log.d("user",user.toString());
+                                            Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
+                                            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+                                            startActivity(intent);
+                                            finish();
+                                        }
+                                    });
+
                                 }
 
                                 @Override

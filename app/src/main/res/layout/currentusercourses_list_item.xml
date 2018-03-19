@@ -44,6 +44,15 @@
             android:layout_marginLeft="20px"
             android:progress="20"
             android:max="100"/>
+        <Button
+            android:id="@+id/delete_course"
+            android:layout_width="25dp"
+            android:layout_height="20dp"
+            android:text="─"
+            android:background="@color/float_transparent"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="10dp"
+            />
     </RelativeLayout>
 
 </com.lucasurbas.listitemview.ListItemView>

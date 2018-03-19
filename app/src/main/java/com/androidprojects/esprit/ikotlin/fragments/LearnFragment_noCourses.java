@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,11 +20,10 @@ public class LearnFragment_noCourses extends Fragment {
 
 
     private static Dialog dialog;
-    static private FragmentManager fgMgr;
 
     @Override
-    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
-        this.fgMgr=getActivity().getSupportFragmentManager();
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
     }
 
     @Override
@@ -44,13 +44,5 @@ public class LearnFragment_noCourses extends Fragment {
         return v;
     }
 
-    public static void switchFragments(int courseNb,Context context){ /** to be called when user clicks " Add to my courses " on courses list**/
-        LearnFragment_currentUserCourses currentUserCourses = new LearnFragment_currentUserCourses();
 
-        /** the call to switchFragment(int) in CoursesListAdapter
-             passes the clicked item position to be used in calling addCourse method
-             **/
-        currentUserCourses.currentUserCourses.add(AllCourses.getCourse(courseNb));
-        fgMgr.beginTransaction().replace(R.id.root_learFragment,currentUserCourses).addToBackStack(null).commit();
-    }
 }

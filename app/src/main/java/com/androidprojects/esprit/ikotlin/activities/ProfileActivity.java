@@ -12,6 +12,7 @@ import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.androidprojects.esprit.ikotlin.R;
 import com.androidprojects.esprit.ikotlin.adapters.ProfileTabsAdapter;
@@ -53,7 +54,7 @@ public class ProfileActivity extends AppCompatActivity {
         if(UserProfileServices.getInstance().isFacebooklogged(this)) profileSettingsBtn.setVisibility(View.GONE);
         else
         /*** profile settings click ***/
-        findViewById(R.id.profileSettingsBtn).setOnClickListener(new View.OnClickListener() {
+            profileSettingsBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                     startActivity(new Intent(getApplicationContext(),ProfileSettingsActivity.class));

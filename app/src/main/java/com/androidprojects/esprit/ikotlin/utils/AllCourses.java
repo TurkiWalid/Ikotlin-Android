@@ -83,7 +83,40 @@ public class AllCourses {
                 break;
         }
 
-        return course;
+        return   course;
+    }
+
+    public static int getIdByTitle(String title){
+        int id = -1;
+        switch (title){
+            case "Overview":
+                id =  0;
+                break;
+            case "Getting started":
+                id =  1;
+                break;
+            case "Basics":
+                id =  2;
+                break;
+            case "Classes and objects":
+                id =  3;
+                break;
+            case "Functions and Lambdas":
+                id =  4;
+                break;
+            case "Others":
+                id =  5;
+                break;
+            case "Java Interop":
+                id =  6;
+                break;
+            case "Javascript":
+                id =  7;
+                break;
+            default:
+                break;
+        }
+        return id;
     }
 
 }

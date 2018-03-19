@@ -5,10 +5,12 @@
     android:background="@color/main_background"
     tools:context="com.androidprojects.esprit.ikotlin.fragments.SkillsFragment">
 
-    <!-- TODO: Update blank fragment layout -->
+
     <TextView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="user skills chart here" />
+        android:text="Soon"
+        android:gravity="center"
+        />
 
 </FrameLayout>

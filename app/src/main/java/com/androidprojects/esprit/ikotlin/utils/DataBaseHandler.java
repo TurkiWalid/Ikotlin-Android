@@ -19,11 +19,13 @@ import java.util.Calendar;
 public class DataBaseHandler extends SQLiteOpenHelper {
 
     //Database version
-    public static final int DATABASE_VERSION=1;
+    public static final int DATABASE_VERSION=2;
     //Database name
     public static final String DATABASE_NAME="ikotlin";
     //table user
     public static final String TABLE_USER="user";
+    //table course
+    public static final String TABLE_COURSE="course";
     //singleton
     public static DataBaseHandler sInstance;
 
@@ -39,6 +41,7 @@ public class DataBaseHandler extends SQLiteOpenHelper {
     public static final String KEY_SKILL_CODER="skill_coder";
     public static final String KEY_CONFIRMED_ACCOUNT="confirmed";
     public static final String KEY_CREATED="created";
+    public static final String KEY_COURSE_ID="courseid";
 
     public DataBaseHandler(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -71,13 +74,20 @@ public class DataBaseHandler extends SQLiteOpenHelper {
                 KEY_CREATED+" INTEGER "+
                 ")";
 
+        String CREATE_ARTICLE_COURSE="CREATE TABLE "+TABLE_COURSE+"("+
+                KEY_ID+" INTEGER PRIMARY KEY, "+
+                KEY_UID+" TEXT, "+
+                KEY_COURSE_ID+" INTEGER )";
+
         sqLiteDatabase.execSQL(CREATE_ARTICLE_TABLE);
+        sqLiteDatabase.execSQL(CREATE_ARTICLE_COURSE);
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase sqLiteDatabase, int i, int i1) {
         //enlever la table si existe
         sqLiteDatabase.execSQL("DROP TABLE IF EXISTS "+TABLE_USER);
+        sqLiteDatabase.execSQL("DROP TABLE IF EXISTS "+TABLE_COURSE);
         //creation de la table
         onCreate(sqLiteDatabase);
     }
@@ -179,5 +189,45 @@ public class DataBaseHandler extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_USER);
         this.onCreate(this.getWritableDatabase());
+    }
+
+
+    public void addCourse(String uid,int courseid){
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put(KEY_UID, uid);
+        values.put(KEY_COURSE_ID, courseid);
+        //INSERT
+        db.insert(TABLE_COURSE,null,values);
+        //CLOSE CONNECTION
+        db.close();
+    }
+    public int[] getCourses(String uid){
+        SQLiteDatabase db= this.getReadableDatabase();
+        String selectQuery="SELECT "+KEY_COURSE_ID+" FROM "+TABLE_COURSE+" WHERE "+KEY_UID+" = '"+uid+"'";
+        Cursor cursor = db.rawQuery(selectQuery, null);
+        int[] array = new int[cursor.getCount()];
+        int i = 0;
+        while(cursor.moveToNext()){
+            int uname = cursor.getInt(cursor.getColumnIndex(KEY_COURSE_ID));
+            array[i] = uname;
+            i++;
+        }
+        return array;
+    }
+    public void deleteCourse(String uid,int courseid) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        Log.d("position :",courseid+"");
+        db.delete(TABLE_COURSE,KEY_COURSE_ID+"="+courseid+" and "+KEY_UID+"= '"+uid+"'",null);
+        db.close();
+    }
+    public boolean courseExist(String uid,int courseid) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        String selectQuery = "SELECT * FROM " + TABLE_COURSE + " WHERE " + KEY_UID + "= '" + uid + "' and " + KEY_COURSE_ID + "=" + courseid;
+        Cursor cursor = db.rawQuery(selectQuery, null);
+        boolean i = cursor.getCount()>0;
+        //Log.d("cursor",cursor.toString()+"    -      "+cursor.getCount());
+        db.close();
+        return i;
     }
 }

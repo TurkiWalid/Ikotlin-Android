@@ -29,7 +29,6 @@ public class ConnectTabsAdapter extends PagerAdapter implements TabAdapter {
         menus = new ArrayList<>();
         Collections.addAll(menus
                 , new MenuBean(R.drawable.ic_shareapp, R.drawable.ic_shareapp_unselected, null)
-                , new MenuBean(R.drawable.ic_feedback, R.drawable.ic_feedback_unselected, null)
                 , new MenuBean(R.drawable.ic_rateus, R.drawable.ic_rateus_unselected, null),
                 new MenuBean(R.drawable.ic_aboutus, R.drawable.ic_aboutus_unselected, null),
                 new MenuBean(R.drawable.ic_faq, R.drawable.ic_faq_unselected, null));
@@ -37,7 +36,7 @@ public class ConnectTabsAdapter extends PagerAdapter implements TabAdapter {
 
     @Override
     public int getCount() {
-        return 5;
+        return 4;
     }
 
     @Override

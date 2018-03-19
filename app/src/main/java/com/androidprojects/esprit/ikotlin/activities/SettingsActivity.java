@@ -58,11 +58,9 @@ public class SettingsActivity extends ListActivity {
         if(UserProfileServices.getInstance().isFacebooklogged(this)) {
             settingsContent = new String[]{
                     "Sep_ACCOUNT",
-                    "Edit profile",
-                    "Sep_",
                     "Sign out"
             };
-            signoutpos = 3;
+            signoutpos = 1;
             ispass=false;
         }
         else {
@@ -85,7 +83,7 @@ public class SettingsActivity extends ListActivity {
       if(position==signoutpos){
                 initSignOut();
         }
-        if(position==1){
+        if(position==1 && position!=signoutpos){
             Intent i = new Intent(SettingsActivity.this,ProfileSettingsActivity.class);
             startActivity(i);
         }

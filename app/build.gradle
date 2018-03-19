@@ -17,6 +17,8 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+    productFlavors {
+    }
 }
 
 dependencies {
@@ -111,7 +113,6 @@ dependencies {
     compile 'com.google.firebase:firebase-auth:9.6.1'
 
     //firebase storage
-
     compile 'com.google.firebase:firebase-storage:9.6.1'
 
     // Required only if Facebook login support is required

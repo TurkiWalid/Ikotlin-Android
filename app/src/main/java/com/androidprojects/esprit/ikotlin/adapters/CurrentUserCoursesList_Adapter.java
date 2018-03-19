@@ -1,16 +1,34 @@
 package com.androidprojects.esprit.ikotlin.adapters;
 
+import android.app.AlertDialog;
+import android.app.FragmentManager;
+import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.media.Image;
+import android.provider.ContactsContract;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.android.volley.VolleyError;
 import com.androidprojects.esprit.ikotlin.R;
+import com.androidprojects.esprit.ikotlin.fragments.ShareFragment;
 import com.androidprojects.esprit.ikotlin.models.Course;
+import com.androidprojects.esprit.ikotlin.utils.AllCourses;
+import com.androidprojects.esprit.ikotlin.utils.DataBaseHandler;
+import com.androidprojects.esprit.ikotlin.webservices.ForumServices;
+import com.androidprojects.esprit.ikotlin.webservices.ServerCallbacks;
 import com.daimajia.numberprogressbar.NumberProgressBar;
+import com.google.firebase.auth.FirebaseAuth;
+
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 
@@ -26,10 +44,12 @@ public class CurrentUserCoursesList_Adapter extends BaseAdapter {
 
     private Context context;
     private ArrayList<Course> currentUserCourses;
+    ProgressDialog progressDialog;
 
     public CurrentUserCoursesList_Adapter(Context context, ArrayList<Course> currentUserCourses){
         this.context=context;
         this.currentUserCourses=currentUserCourses;
+        progressDialog=new ProgressDialog(context);
     }
 
 
@@ -54,11 +74,40 @@ public class CurrentUserCoursesList_Adapter extends BaseAdapter {
      * + perform course rest in DB
      * ***/
     @Override
-    public View getView(final int position, View convertView, ViewGroup parent) {
+    public View getView(final int position, final View convertView, ViewGroup parent) {
         final View rowView= ((LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE)).inflate(R.layout.currentusercourses_list_item,parent, false);
         ((ImageView)rowView.findViewById(R.id.userCourseIcon)).setImageResource(currentUserCourses.get(position).getIconId());
         ((TextView)rowView.findViewById(R.id.userCourseTitle)).setText(currentUserCourses.get(position).getTitle());
         ((NumberProgressBar)rowView.findViewById(R.id.userCourseProgress)).setProgress(currentUserCourses.get(position).getAdvancement());
+        ((Button)rowView.findViewById(R.id.delete_course)).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                new AlertDialog.Builder(context)
+                        //set message, title, and icon
+                        .setTitle("Delete course")
+                        .setMessage("Do you want to delete "+currentUserCourses.get(position).getTitle()+" from list ?")
+                        .setIcon(R.drawable.ic_action_delete)
+                        .setPositiveButton("Delete now", new DialogInterface.OnClickListener() {
+                            public void onClick(final DialogInterface dialog, int whichButton) {
+                                progressDialog.setMessage("Deleting");
+                                progressDialog.show();
+
+                                DataBaseHandler.getInstance(context).deleteCourse(FirebaseAuth.getInstance().getCurrentUser().getUid(), AllCourses.getIdByTitle(currentUserCourses.get(position).getTitle()));
+                                currentUserCourses.remove(position);
+                                CurrentUserCoursesList_Adapter.this.notifyDataSetChanged();
+                                if(progressDialog.isShowing())
+                                    progressDialog.dismiss();
+                            }
+
+                        })
+                        .setNegativeButton("cancel", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.dismiss();
+                            }
+                        })
+                        .show();
+            }
+        });
         /*((ListItemView) rowView.findViewById(R.id.userCoursesListItem )).setOnMenuItemClickListener(new ListItemView.OnMenuItemClickListener() {
             @Override
             public void onActionMenuItemSelected(final MenuItem item) {

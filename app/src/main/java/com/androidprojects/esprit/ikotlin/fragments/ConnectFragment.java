@@ -51,15 +51,12 @@ public class ConnectFragment extends Fragment {
                         getActivity().getFragmentManager().beginTransaction().replace(R.id.faqsRootElement,new ShareAppFragment()).commit();
                         break;
                     case 1:
-                        getActivity().getFragmentManager().beginTransaction().replace(R.id.faqsRootElement,new FeedbackFragment()).commit();
-                        break;
-                    case 2:
                         getActivity().getFragmentManager().beginTransaction().replace(R.id.faqsRootElement,new RateUsFragment()).commit();
                         break;
-                    case 3:
+                    case 2:
                         getActivity().getFragmentManager().beginTransaction().replace(R.id.faqsRootElement,new AboutUsFragment()).commit();
                         break;
-                    case 4:
+                    case 3:
                         getActivity().getFragmentManager().beginTransaction().replace(R.id.faqsRootElement,new FaqsFragment()).commit();
                         break;
                 }

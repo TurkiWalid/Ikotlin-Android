@@ -3,6 +3,7 @@ package com.androidprojects.esprit.ikotlin.adapters;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.support.v7.app.AppCompatActivity;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -14,7 +15,11 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.androidprojects.esprit.ikotlin.R;
+import com.androidprojects.esprit.ikotlin.fragments.LearnFragment_currentUserCourses;
 import com.androidprojects.esprit.ikotlin.fragments.LearnFragment_noCourses;
+import com.androidprojects.esprit.ikotlin.utils.AllCourses;
+import com.androidprojects.esprit.ikotlin.utils.DataBaseHandler;
+import com.google.firebase.auth.FirebaseAuth;
 import com.lucasurbas.listitemview.ListItemView;
 
 import java.util.ArrayList;
@@ -29,7 +34,6 @@ public class CoursesListAdapter extends BaseExpandableListAdapter {
     private List listTitles;
     private HashMap<String, List> listData;
     private int[] icons;
-    final ArrayList<Integer> takenCoursesNbs=new ArrayList<>();
 
 
     public CoursesListAdapter(Context context, List listTitles, HashMap<String, List>listData, int[]icons) {
@@ -97,28 +101,25 @@ public class CoursesListAdapter extends BaseExpandableListAdapter {
             @Override
             public void onActionMenuItemSelected(final MenuItem item) {
                 if(item.getItemId()==R.id.action_startcourse){
-                    /** store this course in sharedPref to display ot later on **/
-                    SharedPreferences coursesPrefs = context.getSharedPreferences("takenCoursesPrefs",0);
-                    SharedPreferences.Editor coursesPrefsEditor = coursesPrefs.edit();
-                    StringBuilder str = new StringBuilder();
-                    if(!takenCoursesNbs.contains(groupPosition)){
-                        takenCoursesNbs.add(groupPosition);
-                        for (int i = 0; i < takenCoursesNbs.size(); i++) {
-                            str.append(takenCoursesNbs.get(i)).append(",");
-                        }
-                        coursesPrefsEditor.putString("takenCourses", str.toString());
-                        coursesPrefsEditor.commit();
+
+                    if(!DataBaseHandler.getInstance(context).courseExist(FirebaseAuth.getInstance().getCurrentUser().getUid(),groupPosition)){
+                        DataBaseHandler.getInstance(context).addCourse(FirebaseAuth.getInstance().getCurrentUser().getUid(),groupPosition);
                         /** switch fragments to display courses list **/
-                       LearnFragment_noCourses.switchFragments(groupPosition,context);
+                        AppCompatActivity activity=(AppCompatActivity) context;
+                        LearnFragment_currentUserCourses currentUserCourses = new LearnFragment_currentUserCourses();
+
+                        currentUserCourses.currentUserCourses.add(AllCourses.getCourse(groupPosition));
+                        activity.getSupportFragmentManager().beginTransaction().replace(R.id.root_learFragment,currentUserCourses).addToBackStack(null).commit();
                     }else{
                         /** will change later on to snackbar or smthin gpresentable **/
-                        Toast toast = Toast.makeText( context, "You are already took this course. You are at 40% advancement !", Toast.LENGTH_SHORT);
+                        Toast toast = Toast.makeText( context, "You are already took this course.", Toast.LENGTH_SHORT);
                         toast.setGravity(Gravity.CENTER, 0, 0);
                         toast.show();
                        /*LinearLayout linearLayout = (((LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE)).inflate(R.layout.fragment_learn_currentusercourses, null)).findViewById(R.id.currentCoursesContainer);
                         Snackbar snackbar = Snackbar.make(linearLayout, "You are already at 40% advancement in this course!", Snackbar.LENGTH_LONG);
                         snackbar.show();**/
                     }
+
                 }
                 if(item.getItemId()==R.id.action_share){
                     Intent shareIntent = new Intent(Intent.ACTION_SEND);

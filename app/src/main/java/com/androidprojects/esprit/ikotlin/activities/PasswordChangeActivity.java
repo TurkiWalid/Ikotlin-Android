@@ -1,6 +1,7 @@
 package com.androidprojects.esprit.ikotlin.activities;
 
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
@@ -21,6 +22,8 @@ import com.google.firebase.auth.EmailAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
+import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
+
 public class PasswordChangeActivity extends AppCompatActivity {
     FirebaseUser user;
     Button savePass;
@@ -32,18 +35,22 @@ public class PasswordChangeActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_password_change);
+
         getSupportActionBar().setDisplayShowCustomEnabled(true);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
+        final View v = LayoutInflater.from(this).inflate(R.layout.actionbartitle_view, null);
+        ((TextView)v.findViewById(R.id.actionBarTitle)).setText("Change password");
+        ((TextView)v.findViewById(R.id.actionBarTitle)).setGravity(Gravity.CENTER_VERTICAL);
+        getSupportActionBar().setCustomView(v);
+
+
         progressDialog=new ProgressDialog(this);
+
         user = FirebaseAuth.getInstance().getCurrentUser();
         savePass = findViewById(R.id.save_password);
         current = findViewById(R.id.pswText_old);
         newpass = findViewById(R.id.pswText_change);
 
-        final View v = LayoutInflater.from(this).inflate(R.layout.actionbartitle_view, null);
-        ((TextView)v.findViewById(R.id.actionBarTitle)).setText("Change password");
-        ((TextView)v.findViewById(R.id.actionBarTitle)).setGravity(Gravity.CENTER_VERTICAL);
-        getSupportActionBar().setCustomView(v);
 
          savePass.setOnClickListener(new View.OnClickListener() {
              @Override
@@ -85,5 +92,10 @@ public class PasswordChangeActivity extends AppCompatActivity {
              }
          });
 
+    }
+
+    @Override
+    protected void attachBaseContext(Context newBase) {
+        super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
     }
 }

@@ -25,5 +25,5 @@
         android:layout_marginRight="1dp"
         android:background="@drawable/connect_tabs_background"
         app:indicator_color="@color/float_transparent"
-        app:tabMode="fixed"/>-->
+        app:tabMode="fixed"/>
 </LinearLayout>

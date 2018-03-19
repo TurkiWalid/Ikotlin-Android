@@ -14,8 +14,8 @@ import com.androidprojects.esprit.ikotlin.fragments.SkillsFragment;
 
 public class ProfileTabsAdapter extends FragmentPagerAdapter {
 
-    private int NUM_ITEMS = 3;
-    private String[] titles= new String[]{"12\nPosts","3\nSkills","5\nBadges"};
+    private int NUM_ITEMS = 1;
+    private String[] titles= new String[]{"Posts"};
 
     public ProfileTabsAdapter(FragmentManager fm) {
         super(fm);
@@ -33,10 +33,6 @@ public class ProfileTabsAdapter extends FragmentPagerAdapter {
         switch (position) {
             case 0:
                 return new PostsFragment();
-            case 1:
-                return new SkillsFragment();
-            case 2:
-                return new BadgesFragment();
             default:
                 return null;
         }
