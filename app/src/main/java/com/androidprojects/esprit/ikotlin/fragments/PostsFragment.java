@@ -7,6 +7,7 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -64,6 +65,8 @@ public class PostsFragment extends Fragment {
 
         /** affect list **/
         forumRececyclerView = getActivity().findViewById(R.id.forum_recycler_view_posts);
+        adapter = new ShareListAdapter(new ArrayList<ForumQuestion>(),getActivity());
+        forumRececyclerView.setAdapter(adapter);
         layoutManager = new LinearLayoutManager(getContext());
         forumRececyclerView.setLayoutManager(layoutManager);
         listForum=new ArrayList<>();
@@ -104,8 +107,6 @@ public class PostsFragment extends Fragment {
             }
         });
 
-        adapter = new ShareListAdapter(new ArrayList<ForumQuestion>(),getActivity());
-        forumRececyclerView.setAdapter(adapter);
         //add scrollListener to the recycler view
         attach_scrollListener();
         load_forum(0);

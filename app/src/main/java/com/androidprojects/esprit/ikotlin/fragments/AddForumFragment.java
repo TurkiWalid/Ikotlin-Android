@@ -133,7 +133,10 @@ public class AddForumFragment extends Fragment {
                     if (progressDialog.isShowing()) {
                         progressDialog.dismiss();
                     }
-                    Toast.makeText(getContext(),"Empty fields",Toast.LENGTH_LONG).show();
+                    if(!f.getTags().isEmpty())
+                    Toast.makeText(getContext(),"Empty fields ",Toast.LENGTH_LONG).show();
+                    else
+                        Toast.makeText(getContext(),"Empty fields \n(tags : Enter a tag and press done)",Toast.LENGTH_LONG).show();
                 }
             }
         });

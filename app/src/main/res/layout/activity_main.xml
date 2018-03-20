@@ -16,7 +16,7 @@
 
     <!-- Logo-->
     <ImageView
-        android:layout_width="300px"
+        android:layout_width="200dp"
         android:layout_height="0dp"
         android:layout_weight="6.36"
         android:src="@drawable/logohorizontal"
@@ -28,11 +28,11 @@
         android:layout_height="0dp"
         android:layout_weight="65"
         android:orientation="vertical">
-    <android.support.v4.view.ViewPager
-        android:id="@+id/vwpMain"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="80"/>
+        <android.support.v4.view.ViewPager
+            android:id="@+id/vwpMain"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="80"/>
         <me.relex.circleindicator.CircleIndicator
             android:id="@+id/circlePageIndicator"
             android:layout_width="match_parent"

@@ -9,6 +9,7 @@ import android.view.View;
 
 import com.androidprojects.esprit.ikotlin.R;
 import com.androidprojects.esprit.ikotlin.adapters.MainUiPagerAdapter;
+import com.google.firebase.FirebaseApp;
 import com.google.firebase.auth.FirebaseAuth;
 import com.rey.material.app.Dialog;
 
@@ -27,7 +28,7 @@ public class MainActivity extends Activity implements View.OnClickListener  {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_main);
-
+        FirebaseApp.initializeApp(this);
         /** check if user is connected **/
         auth=FirebaseAuth.getInstance();
             if(auth.getCurrentUser()!=null){

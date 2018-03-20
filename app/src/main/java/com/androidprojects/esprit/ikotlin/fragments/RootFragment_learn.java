@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.androidprojects.esprit.ikotlin.R;
+import com.androidprojects.esprit.ikotlin.models.Course;
 import com.androidprojects.esprit.ikotlin.utils.AllCourses;
 import com.androidprojects.esprit.ikotlin.utils.DataBaseHandler;
 import com.google.firebase.auth.FirebaseAuth;
@@ -45,11 +46,11 @@ public class RootFragment_learn extends Fragment {
          * false when user reloads all courses on his list ( list is empty )
          */
         int[] coursesTaken = DataBaseHandler.getInstance(getActivity()).getCourses(FirebaseAuth.getInstance().getCurrentUser().getUid());
+        LearnFragment_currentUserCourses currentUserCoursesFragment = new LearnFragment_currentUserCourses();
+        currentUserCoursesFragment.currentUserCourses= new ArrayList<Course>();
         if (coursesTaken.length>0) {
             /** get all current user's taken courses*/
             /** add them to currentUserCourses list and notify the adapter**/
-            LearnFragment_currentUserCourses currentUserCoursesFragment = new LearnFragment_currentUserCourses();
-            currentUserCoursesFragment.currentUserCourses.clear();
             for (int i = 0; i < coursesTaken.length; i++) {
                 currentUserCoursesFragment.currentUserCourses.add(AllCourses.getCourse(coursesTaken[i]));
             }

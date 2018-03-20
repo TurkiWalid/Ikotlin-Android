@@ -62,6 +62,7 @@ public class ProfileSettingsActivity extends AppCompatActivity {
     //Firebase
     FirebaseStorage storage;
     StorageReference storageReference;
+    String oldpic;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -238,14 +239,11 @@ public class ProfileSettingsActivity extends AppCompatActivity {
     }
 
     public void updateDatabase(final String url_image){
-        User u = DataBaseHandler.getInstance(ProfileSettingsActivity.this).getUser();
-        u.setPictureUrl(url_image);
-        DataBaseHandler.getInstance(ProfileSettingsActivity.this).saveUser(u);
         UserProfileServices.getInstance().changeProfilePicture(FirebaseAuth.getInstance().getCurrentUser().getUid(), url_image, this, new ServerCallbacks() {
             @Override
             public void onSuccess(JSONObject result) {
                 User u = DataBaseHandler.getInstance(ProfileSettingsActivity.this).getUser();
-                StorageReference photoRef = storage.getReferenceFromUrl(u.getPictureURL());
+                oldpic = u.getPictureURL();
                 u.setPictureUrl(url_image);
                 DataBaseHandler.getInstance(ProfileSettingsActivity.this).updateUser(u);
                 Toast.makeText(ProfileSettingsActivity.this, "Profile picture saved", Toast.LENGTH_SHORT).show();
@@ -253,19 +251,22 @@ public class ProfileSettingsActivity extends AppCompatActivity {
 
 
                 //deleting old
-                photoRef.delete().addOnSuccessListener(new OnSuccessListener<Void>() {
-                    @Override
-                    public void onSuccess(Void aVoid) {
-                        // File deleted successfully
-                       // Log.d("del", "onSuccess: deleted file");
-                    }
-                }).addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception exception) {
-                        // Uh-oh, an error occurred!
-                      //  Log.d("del", "onFailure: did not delete file");
-                    }
-                });
+                if(oldpic!=null) {
+                    StorageReference photoRef = storage.getReferenceFromUrl(oldpic);
+                    photoRef.delete().addOnSuccessListener(new OnSuccessListener<Void>() {
+                        @Override
+                        public void onSuccess(Void aVoid) {
+                            // File deleted successfully
+                            // Log.d("del", "onSuccess: deleted file");
+                        }
+                    }).addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception exception) {
+                            // Uh-oh, an error occurred!
+                            //  Log.d("del", "onFailure: did not delete file");
+                        }
+                    });
+                }
             }
 
             @Override

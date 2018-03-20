@@ -144,6 +144,7 @@ public class ShareFragment extends Fragment {
                 noConenction_textView.setVisibility(View.GONE);
                 //Log.d("loaded",loaded_length+"by tab");
                 load_forum(0, searchKey.getQuery().toString());
+
             }
         }
     }
@@ -172,8 +173,9 @@ public class ShareFragment extends Fragment {
                             } catch (JSONException e) {
                                 Toast.makeText(getContext(),"Server error while loading forum , please report",Toast.LENGTH_SHORT).show();
                                 goShow=false;
+                                //Log.e("hiding","1");
                             }
-                            if(array.length()==0) goShow=false;
+                            //if(array.length()==0 && loaded_length==0) {goShow=false;  }
                             for(int i = 0 ; i < array.length() ; i++){
                                 try {
                                     /** parse forum and add it to the arraylist**/
@@ -181,6 +183,7 @@ public class ShareFragment extends Fragment {
                                 } catch (JSONException e) {
                                     Toast.makeText(getContext(),"Application error while loading forum , please report",Toast.LENGTH_SHORT).show();
                                     goShow=false;
+                                    //Log.e("hiding","3");
                                 }
                             }
                             /** All the work will be here **/
@@ -256,10 +259,11 @@ public class ShareFragment extends Fragment {
                         if ( (visibleItemCount + pastVisiblesItems) >= totalItemCount-4)
                         {
                             loading=true;
-                            if(adapter!=null)
+                            if(adapter!=null) {
                                 //Log.d("loaded",loaded_length+"by search");
-                                load_forum(loaded_length,searchKey.getQuery().toString());
-                            // //Log.d("loading","loading_more");
+                                load_forum(loaded_length, searchKey.getQuery().toString());
+                                // //Log.d("loading","loading_more");
+                            }
                         }
                     }
                 }
@@ -270,7 +274,7 @@ public class ShareFragment extends Fragment {
         addForum_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                loaded_length=0;
+                //loaded_length=0;
                 AddForumFragment af= new AddForumFragment();
                 getActivity().getSupportFragmentManager().beginTransaction()
                         .replace(R.id.root_share_fragment,af)
@@ -310,6 +314,7 @@ public class ShareFragment extends Fragment {
                 if(Configuration.isOnline(getContext())){
 
                     load_forum(0,s.trim().toLowerCase());
+
                     loadwhile_empty=true;
                 }
 
@@ -320,7 +325,7 @@ public class ShareFragment extends Fragment {
 
             @Override
             public boolean onQueryTextChange(String s) {
-                if(Configuration.isOnline(getContext())&& s.trim().isEmpty() && loadwhile_empty){
+                if(Configuration.isOnline(getContext())&& !s.trim().isEmpty() && loadwhile_empty){
                     listForum.clear();
                     loaded_length=0;
                     forumRececyclerView.removeAllViews();

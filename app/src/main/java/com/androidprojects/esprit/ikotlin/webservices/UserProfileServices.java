@@ -2,6 +2,7 @@ package com.androidprojects.esprit.ikotlin.webservices;
 
 import android.content.Context;
 import android.graphics.drawable.Drawable;
+import android.support.annotation.NonNull;
 import android.widget.Toast;
 
 import com.amulyakhare.textdrawable.TextDrawable;
@@ -15,6 +16,8 @@ import com.androidprojects.esprit.ikotlin.utils.DataBaseHandler;
 import com.androidprojects.esprit.ikotlin.models.User;
 import com.androidprojects.esprit.ikotlin.utils.AppSingleton;
 import com.androidprojects.esprit.ikotlin.utils.Configuration;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.UserInfo;
 
@@ -79,8 +82,8 @@ public class UserProfileServices {
 
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                            //connection problem
-                            serverCallbacks.onError(error);
+                        //connection problem
+                        serverCallbacks.onError(error);
                     }
                 });
         jsObjRequest.setRetryPolicy(new DefaultRetryPolicy(
@@ -163,7 +166,7 @@ public class UserProfileServices {
         } catch (JSONException e) {
             e.printStackTrace();
         }
-       return user;
+        return user;
     }
 
     public Boolean isFacebooklogged(Context context){
@@ -175,8 +178,7 @@ public class UserProfileServices {
         return false;
     }
 
-    public Boolean is_verified(Context context){
-        FirebaseAuth.getInstance().getCurrentUser().reload();
+    public Boolean is_verified(final Context context){
         if(DataBaseHandler.getInstance(context).getUser().isConfirmed()) return true;
         else{
             for (UserInfo user: FirebaseAuth.getInstance().getCurrentUser().getProviderData()) {
@@ -189,10 +191,20 @@ public class UserProfileServices {
                 DataBaseHandler.getInstance(context).setUserConfirmed(true);
                 return true;
             }
+            else {
+                Toast.makeText(context, "Verifing", Toast.LENGTH_LONG).show();
+                FirebaseAuth.getInstance().getCurrentUser().reload().addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        if(!FirebaseAuth.getInstance().getCurrentUser().isEmailVerified()){
+                            Toast.makeText(context, "not verfied", Toast.LENGTH_SHORT).show();
+                            FirebaseAuth.getInstance().getCurrentUser().sendEmailVerification();
+                            Toast.makeText(context, "An email has been sent to your account\nPlease refresh and try again", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                });
+            }
         }
-        Toast.makeText(context, "not verfied", Toast.LENGTH_SHORT).show();
-        FirebaseAuth.getInstance().getCurrentUser().sendEmailVerification();
-        Toast.makeText(context, "An email has been sent to your account\nPlease refresh and try again", Toast.LENGTH_SHORT).show();
         return false;
     }
 

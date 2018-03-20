@@ -112,7 +112,7 @@ public class CoursesListAdapter extends BaseExpandableListAdapter {
                         activity.getSupportFragmentManager().beginTransaction().replace(R.id.root_learFragment,currentUserCourses).addToBackStack(null).commit();
                     }else{
                         /** will change later on to snackbar or smthin gpresentable **/
-                        Toast toast = Toast.makeText( context, "You are already took this course.", Toast.LENGTH_SHORT);
+                        Toast toast = Toast.makeText( context, "You already took this course.", Toast.LENGTH_SHORT);
                         toast.setGravity(Gravity.CENTER, 0, 0);
                         toast.show();
                        /*LinearLayout linearLayout = (((LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE)).inflate(R.layout.fragment_learn_currentusercourses, null)).findViewById(R.id.currentCoursesContainer);

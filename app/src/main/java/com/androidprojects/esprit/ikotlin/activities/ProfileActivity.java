@@ -79,7 +79,7 @@ public class ProfileActivity extends AppCompatActivity {
                 } else
                     ((ImageView) findViewById(R.id.userImgProfile)).setImageDrawable(UserProfileServices.getInstance().getEmptyProfimePicture(user.getUsername()));
             }
-            else if (!user2.getPictureURL().equals(user.getPictureURL())){
+            else {
                 if (user.getPictureURL() != null) {
                     Picasso.with(getApplicationContext()).load(Uri.parse(user.getPictureURL())).into((ImageView) findViewById(R.id.userImgProfile));
                 } else

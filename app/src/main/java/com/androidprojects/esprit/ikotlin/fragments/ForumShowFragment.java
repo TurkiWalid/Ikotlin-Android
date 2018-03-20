@@ -107,130 +107,133 @@ public class ForumShowFragment extends Fragment {
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-            super.onActivityCreated(savedInstanceState);
-            Log.e("activity","activiy createed");
-            //assign widgets
-            ratingUp=getActivity().findViewById(R.id.forum_up_arrow);
-            ratingDown=getActivity().findViewById(R.id.forum_down_arrow);
-            rating_txt=getActivity().findViewById(R.id.forum_rating_show);
-            subject=getActivity().findViewById(R.id.forum_subject);
-            content=getActivity().findViewById(R.id.forum_content);
-            views=getActivity().findViewById(R.id.forum_views_txt);
-            tags=getActivity().findViewById(R.id.forum_tags);
-            username=getActivity().findViewById(R.id.forum_username);
-            creationDate=getActivity().findViewById(R.id.forum_created);
-            picture=getActivity().findViewById(R.id.forum_user_picture);
-            addCommentButton=getActivity().findViewById(R.id.add_Comment);
-            backtoForum=getActivity().findViewById(R.id.backtoForumFromComment);
-            codeView=getActivity().findViewById(R.id.code_view);
-            forumEditButton=getActivity().findViewById(R.id.forum_edit_button);
-            editedText=getActivity().findViewById(R.id.forum_show_edited);
+        super.onActivityCreated(savedInstanceState);
+        Log.e("activity","activiy createed");
+        //assign widgets
+        ratingUp=getActivity().findViewById(R.id.forum_up_arrow);
+        ratingDown=getActivity().findViewById(R.id.forum_down_arrow);
+        rating_txt=getActivity().findViewById(R.id.forum_rating_show);
+        subject=getActivity().findViewById(R.id.forum_subject);
+        content=getActivity().findViewById(R.id.forum_content);
+        views=getActivity().findViewById(R.id.forum_views_txt);
+        tags=getActivity().findViewById(R.id.forum_tags);
+        username=getActivity().findViewById(R.id.forum_username);
+        creationDate=getActivity().findViewById(R.id.forum_created);
+        picture=getActivity().findViewById(R.id.forum_user_picture);
+        addCommentButton=getActivity().findViewById(R.id.add_Comment);
+        backtoForum=getActivity().findViewById(R.id.backtoForumFromComment);
+        codeView=getActivity().findViewById(R.id.code_view);
+        forumEditButton=getActivity().findViewById(R.id.forum_edit_button);
+        editedText=getActivity().findViewById(R.id.forum_show_edited);
 
-            //listeners
-            ratingUp.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    ratingUp.setEnabled(false);
-                    ForumServices.getInstance().upvoteForum(FirebaseAuth.getInstance().getCurrentUser().getUid(),
-                            getContext(), f.getId(), new ServerCallbacks() {
-                                @Override
-                                public void onSuccess(JSONObject result) {
-                                    try {
-                                        rating_txt.setText((result.getInt("resp")>0?"+"+result.getInt("resp"):result.getInt("resp")+"")
-                                        );
-                                        selfVote=1;
-                                        color_voted();
-                                    } catch (JSONException e) {
-                                        e.printStackTrace();
-                                    }
+        /** comment elements*/
+        commentsRececyclerView= getActivity().findViewById(R.id.comments_container_list);
+        /** temp */
+        adapter = new CommentsAdapter(new ArrayList<Answer>(),getActivity());
+        commentsRececyclerView.setAdapter(adapter);
 
-                                    ratingUp.setEnabled(true);
+        //listeners
+        ratingUp.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                ratingUp.setEnabled(false);
+                ForumServices.getInstance().upvoteForum(FirebaseAuth.getInstance().getCurrentUser().getUid(),
+                        getContext(), f.getId(), new ServerCallbacks() {
+                            @Override
+                            public void onSuccess(JSONObject result) {
+                                try {
+                                    rating_txt.setText((result.getInt("resp")>0?"+"+result.getInt("resp"):result.getInt("resp")+"")
+                                    );
+                                    selfVote=1;
+                                    color_voted();
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
                                 }
 
-                                @Override
-                                public void onError(VolleyError result) {
-                                    Toast.makeText(getContext(),"Server problem ",Toast.LENGTH_SHORT).show();
-                                    ratingUp.setEnabled(true);
-                                }
+                                ratingUp.setEnabled(true);
+                            }
 
-                                @Override
-                                public void onWrong(JSONObject result) {
-                                    load_forum();
-                                    ratingUp.setEnabled(true);
-                                }
-                            });
-                }
-            });
-            ratingDown.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    ratingDown.setEnabled(false);
-                    ForumServices.getInstance().downvoteForum(FirebaseAuth.getInstance().getCurrentUser().getUid(),
-                            getContext(), f.getId(), new ServerCallbacks() {
-                                @Override
-                                public void onSuccess(JSONObject result) {
-                                    try {
-                                        rating_txt.setText( (result.getInt("resp")>0?"+"+result.getInt("resp"):result.getInt("resp")+"")
-                                        );
-                                        selfVote=-1;
-                                        color_voted();
-                                    } catch (JSONException e) {
-                                        e.printStackTrace();
-                                    }
-                                    ratingDown.setEnabled(true);
-                                }
+                            @Override
+                            public void onError(VolleyError result) {
+                                Toast.makeText(getContext(),"Server problem ",Toast.LENGTH_SHORT).show();
+                                ratingUp.setEnabled(true);
+                            }
 
-                                @Override
-                                public void onError(VolleyError result) {
-                                    Toast.makeText(getContext(),"Server problem ",Toast.LENGTH_SHORT).show();
-                                    ratingDown.setEnabled(true);
+                            @Override
+                            public void onWrong(JSONObject result) {
+                                load_forum();
+                                ratingUp.setEnabled(true);
+                            }
+                        });
+            }
+        });
+        ratingDown.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                ratingDown.setEnabled(false);
+                ForumServices.getInstance().downvoteForum(FirebaseAuth.getInstance().getCurrentUser().getUid(),
+                        getContext(), f.getId(), new ServerCallbacks() {
+                            @Override
+                            public void onSuccess(JSONObject result) {
+                                try {
+                                    rating_txt.setText( (result.getInt("resp")>0?"+"+result.getInt("resp"):result.getInt("resp")+"")
+                                    );
+                                    selfVote=-1;
+                                    color_voted();
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
                                 }
+                                ratingDown.setEnabled(true);
+                            }
 
-                                @Override
-                                public void onWrong(JSONObject result) {
-                                    load_forum();
-                                    ratingDown.setEnabled(true);
-                                }
-                            });
-                }
-            });
-            backtoForum.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    getActivity().getSupportFragmentManager().popBackStack();
-                }
-            });
+                            @Override
+                            public void onError(VolleyError result) {
+                                Toast.makeText(getContext(),"Server problem ",Toast.LENGTH_SHORT).show();
+                                ratingDown.setEnabled(true);
+                            }
 
-            /** comment elements*/
-            commentsRececyclerView= getActivity().findViewById(R.id.comments_container_list);
-            /** temp */
-            adapter = new CommentsAdapter(new ArrayList<Answer>(),getActivity());
-            commentsRececyclerView.setAdapter(adapter);
-            swipeRefreshLayout=getActivity().findViewById(R.id.comment_refresh_layout);
-            listComments=new ArrayList<>();
-            noComments_textView=getActivity().findViewById(R.id.no_comments_txt);
+                            @Override
+                            public void onWrong(JSONObject result) {
+                                load_forum();
+                                ratingDown.setEnabled(true);
+                            }
+                        });
+            }
+        });
+        backtoForum.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                getActivity().getSupportFragmentManager().popBackStack();
+            }
+        });
 
-                layoutManager = new LinearLayoutManager(getContext());
-                commentsRececyclerView.setLayoutManager(layoutManager);
+
+
+        swipeRefreshLayout=getActivity().findViewById(R.id.comment_refresh_layout);
+        listComments=new ArrayList<>();
+        noComments_textView=getActivity().findViewById(R.id.no_comments_txt);
+
+        layoutManager = new LinearLayoutManager(getContext());
+        commentsRececyclerView.setLayoutManager(layoutManager);
 
         /** swipe to refresh */
-            swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-                @Override
-                public void onRefresh() {
-                    if(Configuration.isOnline(getContext())){
-                        FirebaseAuth.getInstance().getCurrentUser().reload();
-                        loaded_length=0;
-                        load_comments(0);
-                        load_forum();
-                    }
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                if(Configuration.isOnline(getContext())){
+                    FirebaseAuth.getInstance().getCurrentUser().reload();
+                    loaded_length=0;
+                    load_comments(0);
+                    load_forum();
                 }
-            });
+            }
+        });
 
-            loaded_length=0;
+        loaded_length=0;
 
-            setActionListenerToAdd();
-            load_comments(0);
-            attach_scrollListener();
+        setActionListenerToAdd();
+        load_comments(0);
+        attach_scrollListener();
 
     }
 
@@ -336,65 +339,65 @@ public class ForumShowFragment extends Fragment {
     }
 
     public void  setActionListenerToAdd(){
-                    addCommentButton.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View view) {
+        addCommentButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
 
-                            if (UserProfileServices.getInstance().is_verified(getContext())) {
-                                /**
-                                 * go add a comment
-                                 */
-                                LayoutInflater inflater = (LayoutInflater) getActivity().getSystemService(getContext().LAYOUT_INFLATER_SERVICE);
-                                addCommentCostumView=inflater.inflate(R.layout.comment_add_view,null);
+                if (UserProfileServices.getInstance().is_verified(getContext())) {
+                    /**
+                     * go add a comment
+                     */
+                    LayoutInflater inflater = (LayoutInflater) getActivity().getSystemService(getContext().LAYOUT_INFLATER_SERVICE);
+                    addCommentCostumView=inflater.inflate(R.layout.comment_add_view,null);
 
-                                content_toAdd=addCommentCostumView.findViewById(R.id.comment_post_content);
+                    content_toAdd=addCommentCostumView.findViewById(R.id.comment_post_content);
 
-                                /** show add dialog */
+                    /** show add dialog */
 
-                                new MaterialStyledDialog.Builder(getActivity())
-                                        .setTitle("Post a new comment")
-                                        .setStyle(Style.HEADER_WITH_ICON)
-                                        .withIconAnimation(false)
-                                        .setCancelable(true)
-                                        .withDialogAnimation(true)
-                                        .setHeaderColor(R.color.base_color_1)
-                                        .setHeaderScaleType(ImageView.ScaleType.CENTER_CROP)
-                                        .setCustomView(addCommentCostumView,10,30,10,10)
-                                        .setIcon(R.drawable.ic_action_add_comment)
-                                        .setPositiveText("Comment")
-                                        .onPositive(new MaterialDialog.SingleButtonCallback() {
+                    new MaterialStyledDialog.Builder(getActivity())
+                            .setTitle("Post a new comment")
+                            .setStyle(Style.HEADER_WITH_ICON)
+                            .withIconAnimation(false)
+                            .setCancelable(true)
+                            .withDialogAnimation(true)
+                            .setHeaderColor(R.color.base_color_1)
+                            .setHeaderScaleType(ImageView.ScaleType.CENTER_CROP)
+                            .setCustomView(addCommentCostumView,10,30,10,10)
+                            .setIcon(R.drawable.ic_action_add_comment)
+                            .setPositiveText("Comment")
+                            .onPositive(new MaterialDialog.SingleButtonCallback() {
+                                @Override
+                                public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                                    final String ct=content_toAdd.getText().toString().trim();
+                                    if(!ct.isEmpty() && Configuration.isOnline(getContext()) && UserProfileServices.getInstance().is_verified(getContext())){
+                                        ForumServices.getInstance().addAnswer(getContext(), ct, f.getId(), FirebaseAuth.getInstance().getCurrentUser().getUid(), new ServerCallbacks() {
                                             @Override
-                                            public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                                                final String ct=content_toAdd.getText().toString().trim();
-                                                if(!ct.isEmpty() && Configuration.isOnline(getContext()) && UserProfileServices.getInstance().is_verified(getContext())){
-                                                    ForumServices.getInstance().addAnswer(getContext(), ct, f.getId(), FirebaseAuth.getInstance().getCurrentUser().getUid(), new ServerCallbacks() {
-                                                        @Override
-                                                        public void onSuccess(JSONObject result) {
-                                                                load_comments(0);
-                                                        }
-
-                                                        @Override
-                                                        public void onError(VolleyError result) {
-                                                            Toast.makeText(getContext(),"Server problem",Toast.LENGTH_SHORT).show();
-                                                        }
-
-                                                        @Override
-                                                        public void onWrong(JSONObject result) {
-                                                            Toast.makeText(getContext(),"Problem while posting, please retry",Toast.LENGTH_SHORT).show();
-                                                        }
-                                                    });
-                                                }
-                                               else {
-                                                    Toast.makeText(getContext(),"Nothing to post",Toast.LENGTH_SHORT).show();
-                                                }
+                                            public void onSuccess(JSONObject result) {
+                                                load_comments(0);
                                             }
-                                        })
-                                        .show();
 
-                            }
-                        }
-                    });
-        }
+                                            @Override
+                                            public void onError(VolleyError result) {
+                                                Toast.makeText(getContext(),"Server problem",Toast.LENGTH_SHORT).show();
+                                            }
+
+                                            @Override
+                                            public void onWrong(JSONObject result) {
+                                                Toast.makeText(getContext(),"Problem while posting, please retry",Toast.LENGTH_SHORT).show();
+                                            }
+                                        });
+                                    }
+                                    else {
+                                        Toast.makeText(getContext(),"Nothing to post",Toast.LENGTH_SHORT).show();
+                                    }
+                                }
+                            })
+                            .show();
+
+                }
+            }
+        });
+    }
 
 
 
@@ -467,7 +470,7 @@ public class ForumShowFragment extends Fragment {
         content.setText(f.getContent());
 
         if(!mine) username.setText(f.getUser_name());
-            else username.setText("By me ");
+        else username.setText("By me ");
 
         creationDate.setText(f.getCreated_string());
 
@@ -517,7 +520,7 @@ public class ForumShowFragment extends Fragment {
             codeView.setVisibility(View.GONE);
 
         if(mine) forumEditButton.setVisibility(View.VISIBLE);
-            attachEditForumListener();
+        attachEditForumListener();
 
         if(f.getEdited()!=null){
             editedText.setText("Last Edited: "+f.getEditedString());

@@ -1,7 +1,8 @@
 package com.androidprojects.esprit.ikotlin.fragments;
 
 import android.os.Bundle;
-import android.app.Fragment;
+
+import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,7 +17,7 @@ public class FaqsFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View v= inflater.inflate(R.layout.fragment_faqs, container, false);
-        ((ExpandableListView)v.findViewById(R.id.faqsListView)).setAdapter(new FaqsListAdapter(getContext()));
+        ((ExpandableListView)v.findViewById(R.id.faqsListView)).setAdapter(new FaqsListAdapter(this.getContext()));
         return v;
     }
 

@@ -9,6 +9,7 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -46,9 +47,11 @@ public class FragmentCompeteMain extends Fragment {
 
     FloatingActionButton addButton;
 
-    int level=1;
+    static int level=1;
     int order=1;
     int toggle=0;
+    int lastToggle = -1;
+    int lastOrder = -1;
 
     int loaded_length_competition=0,loaded_length_answers=0;
     int pastVisiblesItems, visibleItemCount, totalItemCount;
@@ -122,12 +125,14 @@ public class FragmentCompeteMain extends Fragment {
 
     }
 
-    public void LoadList(){
+    public synchronized void LoadList(){
         if (Configuration.isOnline(getContext())){
-            competeAnswerSwipeRefresh.setRefreshing(true);
-            competeSwipeRefresh.setRefreshing(true);
+
             switch (toggle){
                 case 0:
+                    competitionsRecyclerView.setVisibility(View.VISIBLE);
+                    answersRecyclerView.setVisibility(View.GONE);
+                    competeSwipeRefresh.setRefreshing(true);
                     if(loaded_length_competition==0){
                         competitionsRecyclerView.removeAllViews();
                         competitionList.clear();
@@ -203,6 +208,9 @@ public class FragmentCompeteMain extends Fragment {
 
                     break;
                 case 1:
+                    competitionsRecyclerView.setVisibility(View.GONE);
+                    answersRecyclerView.setVisibility(View.VISIBLE);
+                    competeAnswerSwipeRefresh.setRefreshing(true);
                    if(loaded_length_answers==0){
                        answersRecyclerView.removeAllViews();
                        answersList.clear();
@@ -338,10 +346,11 @@ public class FragmentCompeteMain extends Fragment {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                 order=i+1;
-                if(toggle==0){
+                if(toggle==0 && lastOrder!= order){
                     loaded_length_competition=0;
                     loaded_length_answers=0;
                     LoadList();
+                    lastOrder = order;
                 }
             }
 
@@ -364,7 +373,10 @@ public class FragmentCompeteMain extends Fragment {
                 else
                     orderSpinner.setVisibility(View.VISIBLE);
                 disabbleLevels();
-                LoadList();
+                if(lastToggle!=value) {
+                    LoadList();
+                    lastToggle= value;
+                }
             }
         });
     }
@@ -579,6 +591,82 @@ public class FragmentCompeteMain extends Fragment {
         loaded_length_answers=0;
         loaded_length_competition=0;
         LoadList();
+        colorcurrentLevel();
 
+    }
+
+    public void colorcurrentLevel(){
+        switch (level){
+            case 1:
+
+                    bL2.setBackgroundColor(getContext().getResources().getColor(R.color.material_blue_grey_80));
+                    bL3.setBackgroundColor(getContext().getResources().getColor(R.color.material_blue_grey_80));
+                    bL4.setBackgroundColor(getContext().getResources().getColor(R.color.material_blue_grey_80));
+                    bL5.setBackgroundColor(getContext().getResources().getColor(R.color.material_blue_grey_80));
+                    bL6.setBackgroundColor(getContext().getResources().getColor(R.color.material_blue_grey_80));
+
+                    bL1.setBackgroundColor(getContext().getResources().getColor(R.color.base_color_2));
+            break;
+
+            case 2:
+
+                    bL1.setBackgroundColor(getContext().getResources().getColor(R.color.material_blue_grey_80));
+                    bL3.setBackgroundColor(getContext().getResources().getColor(R.color.material_blue_grey_80));
+                    bL4.setBackgroundColor(getContext().getResources().getColor(R.color.material_blue_grey_80));
+                    bL5.setBackgroundColor(getContext().getResources().getColor(R.color.material_blue_grey_80));
+                    bL6.setBackgroundColor(getContext().getResources().getColor(R.color.material_blue_grey_80));
+
+                    bL2.setBackgroundColor(getContext().getResources().getColor(R.color.base_color_2));
+                    loaded_length_competition=0;
+                    loaded_length_answers=0;
+             break;
+            case 3:
+
+                    bL2.setBackgroundColor(getContext().getResources().getColor(R.color.material_blue_grey_80));
+                    bL1.setBackgroundColor(getContext().getResources().getColor(R.color.material_blue_grey_80));
+                    bL4.setBackgroundColor(getContext().getResources().getColor(R.color.material_blue_grey_80));
+                    bL5.setBackgroundColor(getContext().getResources().getColor(R.color.material_blue_grey_80));
+                    bL6.setBackgroundColor(getContext().getResources().getColor(R.color.material_blue_grey_80));
+
+                    bL3.setBackgroundColor(getContext().getResources().getColor(R.color.base_color_2));
+                    loaded_length_competition=0;
+                    loaded_length_answers=0;
+             break;
+            case 4:
+                    bL2.setBackgroundColor(getContext().getResources().getColor(R.color.material_blue_grey_80));
+                    bL3.setBackgroundColor(getContext().getResources().getColor(R.color.material_blue_grey_80));
+                    bL1.setBackgroundColor(getContext().getResources().getColor(R.color.material_blue_grey_80));
+                    bL5.setBackgroundColor(getContext().getResources().getColor(R.color.material_blue_grey_80));
+                    bL6.setBackgroundColor(getContext().getResources().getColor(R.color.material_blue_grey_80));
+
+                    bL4.setBackgroundColor(getContext().getResources().getColor(R.color.base_color_2));
+                    loaded_length_competition=0;
+                    loaded_length_answers=0;
+            break;
+            case 5:
+
+                    bL2.setBackgroundColor(getContext().getResources().getColor(R.color.material_blue_grey_80));
+                    bL3.setBackgroundColor(getContext().getResources().getColor(R.color.material_blue_grey_80));
+                    bL4.setBackgroundColor(getContext().getResources().getColor(R.color.material_blue_grey_80));
+                    bL1.setBackgroundColor(getContext().getResources().getColor(R.color.material_blue_grey_80));
+                    bL6.setBackgroundColor(getContext().getResources().getColor(R.color.material_blue_grey_80));
+
+                    bL5.setBackgroundColor(getContext().getResources().getColor(R.color.base_color_2));
+                    loaded_length_competition=0;
+                    loaded_length_answers=0;
+             break;
+
+            case 6:
+                    bL2.setBackgroundColor(getContext().getResources().getColor(R.color.material_blue_grey_80));
+                    bL3.setBackgroundColor(getContext().getResources().getColor(R.color.material_blue_grey_80));
+                    bL4.setBackgroundColor(getContext().getResources().getColor(R.color.material_blue_grey_80));
+                    bL5.setBackgroundColor(getContext().getResources().getColor(R.color.material_blue_grey_80));
+                    bL1.setBackgroundColor(getContext().getResources().getColor(R.color.material_blue_grey_80));
+
+                    bL6.setBackgroundColor(getContext().getResources().getColor(R.color.base_color_2));
+                    loaded_length_competition=0;
+                    loaded_length_answers=0;
+             break;
+        }
     }
 }

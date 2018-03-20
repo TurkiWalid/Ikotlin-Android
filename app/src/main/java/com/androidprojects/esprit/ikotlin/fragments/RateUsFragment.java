@@ -1,6 +1,6 @@
 package com.androidprojects.esprit.ikotlin.fragments;
 
-import android.app.Fragment;
+import android.support.v4.app.Fragment;
 import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.net.Uri;
@@ -20,7 +20,7 @@ public class RateUsFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,Bundle savedInstanceState) {
-         View v = inflater.inflate(R.layout.fragment_rate_us, container, false);
+        View v = inflater.inflate(R.layout.fragment_rate_us, container, false);
         (v.findViewById(R.id.submitBtn)).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

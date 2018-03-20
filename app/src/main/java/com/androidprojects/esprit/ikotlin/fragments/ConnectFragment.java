@@ -29,7 +29,7 @@ public class ConnectFragment extends Fragment {
         View v = inflater.inflate(R.layout.fragment_connect, container, false);
 
         /** load first icon's code **/
-        getActivity().getFragmentManager().beginTransaction().replace(R.id.faqsRootElement,new ShareAppFragment()).addToBackStack(null).commit();
+        getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.faqsRootElement,new ShareAppFragment()).addToBackStack(null).commit();
 
         /** will be used to change tab icons colors on select/deselect */
         matrix = new ColorMatrix();
@@ -48,16 +48,16 @@ public class ConnectFragment extends Fragment {
             public void onTabSelected(TabView tab, int position) {
                 switch (position){
                     case 0:
-                        getActivity().getFragmentManager().beginTransaction().replace(R.id.faqsRootElement,new ShareAppFragment()).commit();
+                        getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.faqsRootElement,new ShareAppFragment()).commit();
                         break;
                     case 1:
-                        getActivity().getFragmentManager().beginTransaction().replace(R.id.faqsRootElement,new RateUsFragment()).commit();
+                        getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.faqsRootElement,new RateUsFragment()).commit();
                         break;
                     case 2:
-                        getActivity().getFragmentManager().beginTransaction().replace(R.id.faqsRootElement,new AboutUsFragment()).commit();
+                        getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.faqsRootElement,new AboutUsFragment()).commit();
                         break;
                     case 3:
-                        getActivity().getFragmentManager().beginTransaction().replace(R.id.faqsRootElement,new FaqsFragment()).commit();
+                        getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.faqsRootElement,new FaqsFragment()).commit();
                         break;
                 }
             }
